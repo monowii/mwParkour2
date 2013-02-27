@@ -1,0 +1,9 @@
+name: mwParkour2
+version: 1.4
+description: monowii's parkour plugin
+author: monowii
+depend: [Vault]
+main: monowii.parkour2.main
+commands:
+  parkour:
+    aliases: [pk]
