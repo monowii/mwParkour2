@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -171,28 +172,28 @@ public class Parkour extends JavaPlugin implements Listener
 		{
 			if (args.length == 0)
 			{
-				p.sendMessage("§6---------=[ §8mwParkour2 v" + getDescription().getVersion() + " by monowii §6]=---------");
+				p.sendMessage("\u00A76---------=[ \u00A78mwParkour2 v" + getDescription().getVersion() + " by monowii \u00A76]=---------");
 
 				if (p.hasPermission("parkour.mapeditor") || p.hasPermission("parkour.admin"))
 				{
-					p.sendMessage("§a/" + CommandLabel + " new <mapName> <mapCreator>§f  - Create a new map");
-					p.sendMessage("§a/" + CommandLabel + " done§f  - Confirm and create the map");
-					p.sendMessage("§a/" + CommandLabel + " remove <mapNumber>§f  - Remove a map");
-					p.sendMessage("§a/" + CommandLabel + " changeMapName <mapNumber> <newMapName>§f  - Change the map name");
-					p.sendMessage("§a/" + CommandLabel + " changeMapCreator <mapNumber> <newMapCreator>§f  - Change the Creator");
-					p.sendMessage("§a/" + CommandLabel + " setSpawn <mapNumber>§f  - Set the map spawn");
+					p.sendMessage("\u00A7a/" + CommandLabel + " new <mapName> <mapCreator>\u00A7f  - Create a new map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " done\u00A7f  - Confirm and create the map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " remove <mapNumber>\u00A7f  - Remove a map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " changeMapName <mapNumber> <newMapName>\u00A7f  - Change the map name");
+					p.sendMessage("\u00A7a/" + CommandLabel + " changeMapCreator <mapNumber> <newMapCreator>\u00A7f  - Change the Creator");
+					p.sendMessage("\u00A7a/" + CommandLabel + " setSpawn <mapNumber>\u00A7f  - Set the map spawn");
 				}
 				if (p.hasPermission("parkour.admin"))
 				{
-					p.sendMessage("§2/" + CommandLabel + " setLobby§f  - Set the lobby spawn");
-					p.sendMessage("§2/" + CommandLabel + " toggle <mapNumber>§f  - toggle ON/OFF a parkour");
-					p.sendMessage("§2/" + CommandLabel + " resetScores <mapNumber>§f  - Reset All scores for a map");
-					p.sendMessage("§2/" + CommandLabel + " pReset <Player> [<mapNumber> / all]§f  - Reset scores for a player");
+					p.sendMessage("\u00A72/" + CommandLabel + " setLobby\u00A7f  - Set the lobby spawn");
+					p.sendMessage("\u00A72/" + CommandLabel + " toggle <mapNumber>\u00A7f  - toggle ON/OFF a parkour");
+					p.sendMessage("\u00A72/" + CommandLabel + " resetScores <mapNumber>\u00A7f  - Reset All scores for a map");
+					p.sendMessage("\u00A72/" + CommandLabel + " pReset <Player> [<mapNumber> / all]\u00A7f  - Reset scores for a player");
 				}
-				p.sendMessage("/§7" + CommandLabel + " MapList§f  - Show all the maps");
-				p.sendMessage("/§7" + CommandLabel + " best <MapNumber>§f  - Show the best score of a map");
-				p.sendMessage("/§7" + CommandLabel + " leave§f - Left the map");
-				p.sendMessage("/§7" + CommandLabel + " join <mapNumber>§f - Join a map");
+				p.sendMessage("/\u00A77" + CommandLabel + " MapList\u00A7f  - Show all the maps");
+				p.sendMessage("/\u00A77" + CommandLabel + " best <MapNumber>\u00A7f  - Show the best score of a map");
+				p.sendMessage("/\u00A77" + CommandLabel + " leave\u00A7f - Left the map");
+				p.sendMessage("/\u00A77" + CommandLabel + " join <mapNumber>\u00A7f - Join a map");
 			}
 			else
 			{
@@ -223,18 +224,18 @@ public class Parkour extends JavaPlugin implements Listener
 								}
 								else
 								{
-									p.sendMessage("§cMap spawn is not set !");
+									p.sendMessage("\u00A7cMap spawn is not set !");
 								}
 
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
@@ -246,7 +247,7 @@ public class Parkour extends JavaPlugin implements Listener
 				{
 					if (Parkour.containsKey(p.getName()))
 					{
-						p.sendMessage("§aYou leave the parkour !");
+						p.sendMessage("\u00A7aYou leave the parkour !");
 						Parkour.remove(p.getName());
 						if (lobby != null)
 						{
@@ -256,7 +257,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					else
 					{
-						p.sendMessage("§cYou are not in a parkour !");
+						p.sendMessage("\u00A7cYou are not in a parkour !");
 					}
 				}
 
@@ -272,7 +273,7 @@ public class Parkour extends JavaPlugin implements Listener
 								getConfig().getConfigurationSection("Parkour").set("map" + mapNumber, null);
 								getConfig().set("Parkour.mapsNombre", Integer.valueOf(getConfig().getInt("Parkour.mapsNombre") - 1));
 								saveConfig();
-								p.sendMessage("§2map" + mapNumber + "§f is now deleted !");
+								p.sendMessage("\u00A72map" + mapNumber + "\u00A7f is now deleted !");
 
 								for (Iterator<String> it = Records.keySet().iterator(); it.hasNext();)
 								{
@@ -290,17 +291,17 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cYou must specify the map number !");
+						p.sendMessage("\u00A7cYou must specify the map number !");
 					}
 				}
 
@@ -314,13 +315,13 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								if (getConfig().getBoolean("Parkour.map" + args[1] + ".toggle"))
 								{
-									p.sendMessage("Map toggle to §4OFF");
+									p.sendMessage("Map toggle to \u00A74OFF");
 									getConfig().set("Parkour.map" + args[1] + ".toggle", false);
 									saveConfig();
 								}
 								else
 								{
-									p.sendMessage("Map toggle to §aON");
+									p.sendMessage("Map toggle to \u00A7aON");
 									getConfig().set("Parkour.map" + args[1] + ".toggle", true);
 									saveConfig();
 								}
@@ -338,7 +339,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					else
 					{
-						p.sendMessage("§cYou must specify the map number !");
+						p.sendMessage("\u00A7cYou must specify the map number !");
 					}
 				}
 
@@ -352,7 +353,7 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								newMapPlayerEditor = p.getName();
 								newMap = true;
-								p.sendMessage("MapEditor §aON §7(Use the stick and right click on all checkpoint in order then type /pk done)");
+								p.sendMessage("MapEditor \u00A7aON \u00A77(Use the stick and right click on all checkpoint in order then type /pk done)");
 								CheckpointNumber = 1;
 								newMapName = args[1];
 								newMapCreator = args[2];
@@ -360,17 +361,17 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cA player is already using the MapEditor (" + newMapPlayerEditor + ") ! You must wait a bit !");
+								p.sendMessage("\u00A7cA player is already using the MapEditor (" + newMapPlayerEditor + ") ! You must wait a bit !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cCorrect usage : /pk new <mapName> <mapCreator>");
+							p.sendMessage("\u00A7cCorrect usage : /pk new <mapName> <mapCreator>");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cCorrect usage : /pk new <mapName> <mapCreator>");
+						p.sendMessage("\u00A7cCorrect usage : /pk new <mapName> <mapCreator>");
 					}
 				}
 
@@ -378,7 +379,7 @@ public class Parkour extends JavaPlugin implements Listener
 				{
 					if (!newMap)
 					{
-						p.sendMessage("§cMapEditor is not ON !");
+						p.sendMessage("\u00A7cMapEditor is not ON !");
 					}
 					else
 					{
@@ -386,7 +387,7 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (CheckpointNumber >= 3)
 							{
-								p.sendMessage("§a" + newMapName + "(map" + NewMapNumber + ") created ! §fMapEditor §4OFF");
+								p.sendMessage("\u00A7a" + newMapName + "(map" + NewMapNumber + ") created ! \u00A7fMapEditor \u00A74OFF");
 
 								FileConfiguration cfg = getConfig();
 								cfg.set("Parkour.mapsNombre", (getConfig().getInt("Parkour.mapsNombre")) + 1);
@@ -412,7 +413,7 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cA parkour need at least 3 checkpoints ! §fMapEditor §4OFF");
+								p.sendMessage("\u00A7cA parkour need at least 3 checkpoints ! \u00A7fMapEditor \u00A74OFF");
 								newMapPlayerEditor = null;
 								newMapName = null;
 								newMapCreator = null;
@@ -425,7 +426,7 @@ public class Parkour extends JavaPlugin implements Listener
 						}
 						else
 						{
-							p.sendMessage("§cA player is already using the MapEditor (" + newMapPlayerEditor + ") ! You must wait a bit !");
+							p.sendMessage("\u00A7cA player is already using the MapEditor (" + newMapPlayerEditor + ") ! You must wait a bit !");
 						}
 					}
 				}
@@ -440,21 +441,21 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								getConfig().set("Parkour.map" + args[1] + ".mapName", args[2]);
 								saveConfig();
-								p.sendMessage("§aMap name set to '§b" + args[2] + "'§a for map" + args[1]);
+								p.sendMessage("\u00A7aMap name set to '\u00A7b" + args[2] + "'\u00A7a for map" + args[1]);
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cCorrect usage : /pk changeMapName <mapNumber> <newMapName>");
+						p.sendMessage("\u00A7cCorrect usage : /pk changeMapName <mapNumber> <newMapName>");
 					}
 				}
 
@@ -468,21 +469,21 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								getConfig().set("Parkour.map" + args[1] + ".mapCreator", args[2]);
 								saveConfig();
-								p.sendMessage("§aCreator set to '§b" + args[2] + "'§a for map" + args[1]);
+								p.sendMessage("\u00A7aCreator set to '\u00A7b" + args[2] + "'\u00A7a for map" + args[1]);
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cCorrect usage /pk ... !");
+						p.sendMessage("\u00A7cCorrect usage /pk ... !");
 					}
 				}
 
@@ -502,16 +503,16 @@ public class Parkour extends JavaPlugin implements Listener
 								cfg.set("Parkour.map" + mapNumber + ".spawn.posPitch", p.getLocation().getPitch());
 								cfg.set("Parkour.map" + mapNumber + ".spawn.posYaw", p.getLocation().getYaw());
 								saveConfig();
-								p.sendMessage("§aParkour spawn set to §2map" + mapNumber + "§f !");
+								p.sendMessage("\u00A7aParkour spawn set to \u00A72map" + mapNumber + "\u00A7f !");
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 
 					}
@@ -531,7 +532,7 @@ public class Parkour extends JavaPlugin implements Listener
 					cfg.set("Lobby.posPitch", p.getLocation().getPitch());
 					cfg.set("Lobby.posYaw", p.getLocation().getYaw());
 					saveConfig();
-					p.sendMessage("§aLobby set !");
+					p.sendMessage("\u00A7aLobby set !");
 					loadLobby();
 				}
 
@@ -580,52 +581,52 @@ public class Parkour extends JavaPlugin implements Listener
 
 								if (!PlayerFound)
 								{
-									p.sendMessage("§cPlayer not found in this scoreboard !");
+									p.sendMessage("\u00A7cPlayer not found in this scoreboard !");
 									return true;
 								}
 
 								if (DeleteOnAllMaps)
 								{
-									p.sendMessage("§aScores reset for player " + player + " on all maps !");
+									p.sendMessage("\u00A7aScores reset for player " + player + " on all maps !");
 								}
 								else
 								{
-									p.sendMessage("§aScores reset for player " + player + " on map " + mapNumber + " !");
+									p.sendMessage("\u00A7aScores reset for player " + player + " on map " + mapNumber + " !");
 								}
 
 								loadScore();
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cYou must specify the player/mapNumber !");
+						p.sendMessage("\u00A7cYou must specify the player/mapNumber !");
 					}
 				}
 
 				else if (args[0].equalsIgnoreCase("MapList"))
 				{
-					p.sendMessage("§8---------=[§a Parkour Map List §8]=---------");
+					p.sendMessage("\u00A78---------=[\u00A7a Parkour Map List \u00A78]=---------");
 
 					for (int i : maps)
 					{
 						String mapNumber = "" + i;
 						if (maps.contains(toInt(mapNumber)))
 						{
-							String mode = "§4OFF";
+							String mode = "\u00A74OFF";
 							if (toggleParkour.get(i))
 							{
-								mode = "§aON";
+								mode = "\u00A7aON";
 							}
-							p.sendMessage(mode + " §f| §b " + getMapName(i) + "§7 (§2map" + i + "§7) §7(" + getCfgTotalCheckpoints(i) + " Checkpoints) §aby " + getMapCreator(i));
+							p.sendMessage(mode + " \u00A7f| \u00A7b " + getMapName(i) + "\u00A77 (\u00A72map" + i + "\u00A77) \u00A77(" + getCfgTotalCheckpoints(i) + " Checkpoints) \u00A7aby " + getMapCreator(i));
 						}
 					}
 				}
@@ -642,17 +643,17 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cUnknown map number !");
+								p.sendMessage("\u00A7cUnknown map number !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cThis is not a valid mapNumber !");
+							p.sendMessage("\u00A7cThis is not a valid mapNumber !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cYou don't specify the map !");
+						p.sendMessage("\u00A7cYou don't specify the map !");
 					}
 				}
 
@@ -665,7 +666,7 @@ public class Parkour extends JavaPlugin implements Listener
 							if (maps.contains(toInt(args[1])))
 							{
 								int mapNumber = Integer.parseInt(args[1]);
-								p.sendMessage("§2Scores reset for map" + mapNumber + "!");
+								p.sendMessage("\u00A72Scores reset for map" + mapNumber + "!");
 
 								for (Iterator<String> it = Records.keySet().iterator(); it.hasNext();)
 								{
@@ -681,24 +682,24 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cIt is not a valid mapNumber !");
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
 							}
 						}
 						else
 						{
-							p.sendMessage("§cIt is not a valid number !");
+							p.sendMessage("\u00A7cIt is not a valid number !");
 						}
 					}
 					else
 					{
-						p.sendMessage("§cYou must specify the map number !");
+						p.sendMessage("\u00A7cYou must specify the map number !");
 					}
 				}
 
 				else
 				{
 
-					p.sendMessage("§cUnknown command arguments !");
+					p.sendMessage("\u00A7cUnknown command arguments !");
 
 				}
 			}
@@ -781,7 +782,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 					e.setLine(0, "[mwParkour2]");
 					e.setLine(1, "joinLastMap");
-					e.setLine(2, "§b" + getMapName(mapNumber));
+					e.setLine(2, "\u00A7b" + getMapName(mapNumber));
 					e.setLine(3, "(map" + mapNumber + ")");
 				}
 				if (e.getLine(1).equalsIgnoreCase("join"))
@@ -794,7 +795,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 							e.setLine(0, "[mwParkour2]");
 							e.setLine(1, "join");
-							e.setLine(2, "§b" + getMapName(MapNumber));
+							e.setLine(2, "\u00A7b" + getMapName(MapNumber));
 							e.setLine(3, "(map" + MapNumber + ")");
 						}
 						else
@@ -813,7 +814,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 					e.setLine(0, "[mwParkour2]");
 					e.setLine(1, "lastBestScores");
-					e.setLine(2, "§b" + getMapName(mapNumber));
+					e.setLine(2, "\u00A7b" + getMapName(mapNumber));
 					e.setLine(3, "(map" + mapNumber + ")");
 				}
 				if (e.getLine(1).equalsIgnoreCase("infos"))
@@ -826,7 +827,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 							e.setLine(0, "Parkour #" + MapNumber);
 							e.setLine(1, "---------------");
-							e.setLine(2, "§b" + getMapName(MapNumber));
+							e.setLine(2, "\u00A7b" + getMapName(MapNumber));
 							e.setLine(3, getMapCreator(MapNumber));
 						}
 						else
@@ -849,7 +850,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 							e.setLine(0, "[mwParkour2]");
 							e.setLine(1, "bestScores");
-							e.setLine(2, "§b" + getMapName(MapNumber));
+							e.setLine(2, "\u00A7b" + getMapName(MapNumber));
 							e.setLine(3, "(map" + MapNumber + ")");
 						}
 						else
@@ -882,7 +883,7 @@ public class Parkour extends JavaPlugin implements Listener
 					{
 						if (Parkour.containsKey(e.getPlayer().getName()))
 						{
-							e.getPlayer().sendMessage("§aYou leave the parkour !");
+							e.getPlayer().sendMessage("\u00A7aYou leave the parkour !");
 							Parkour.remove(e.getPlayer().getName());
 
 						}
@@ -924,14 +925,14 @@ public class Parkour extends JavaPlugin implements Listener
 									}
 									else
 									{
-										p.sendMessage("§cMap spawn is not set !");
+										p.sendMessage("\u00A7cMap spawn is not set !");
 									}
 								}
 								else
 								{
 									s.setLine(0, "[mwParkour2]");
 									s.setLine(1, "joinLastMap");
-									s.setLine(2, "§b" + getMapName(maxMapNumber()));
+									s.setLine(2, "\u00A7b" + getMapName(maxMapNumber()));
 									s.setLine(3, "(map" + maxMapNumber() + ")");
 									s.update();
 								}
@@ -940,7 +941,7 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								s.setLine(0, "[mwParkour2]");
 								s.setLine(1, "joinLastMap");
-								s.setLine(2, "§b" + getMapName(maxMapNumber()));
+								s.setLine(2, "\u00A7b" + getMapName(maxMapNumber()));
 								s.setLine(3, "(map" + maxMapNumber() + ")");
 								s.update();
 							}
@@ -962,7 +963,7 @@ public class Parkour extends JavaPlugin implements Listener
 								{
 									s.setLine(0, "[mwParkour2]");
 									s.setLine(1, "lastBestScores");
-									s.setLine(2, "§b" + getMapName(maxMapNumber()));
+									s.setLine(2, "\u00A7b" + getMapName(maxMapNumber()));
 									s.setLine(3, "(map" + maxMapNumber() + ")");
 									s.update();
 								}
@@ -971,7 +972,7 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								s.setLine(0, "[mwParkour2]");
 								s.setLine(1, "lastBestScores");
-								s.setLine(2, "§b" + getMapName(maxMapNumber()));
+								s.setLine(2, "\u00A7b" + getMapName(maxMapNumber()));
 								s.setLine(3, "(map" + maxMapNumber() + ")");
 								s.update();
 							}
@@ -1014,12 +1015,12 @@ public class Parkour extends JavaPlugin implements Listener
 								}
 								else
 								{
-									p.sendMessage("§cMap spawn is not set !");
+									p.sendMessage("\u00A7cMap spawn is not set !");
 								}
 							}
 							else
 							{
-								e.getPlayer().sendMessage("§cThis map no longer exists !");
+								e.getPlayer().sendMessage("\u00A7cThis map no longer exists !");
 							}
 						}
 					}
@@ -1036,7 +1037,7 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								e.getPlayer().sendMessage("§cThis map no longer exists !");
+								e.getPlayer().sendMessage("\u00A7cThis map no longer exists !");
 							}
 						}
 					}
@@ -1058,13 +1059,13 @@ public class Parkour extends JavaPlugin implements Listener
 
 						if (newMapCheckpoints.contains(bLoc))
 						{
-							p.sendMessage("§cThis checkpoint is alredy used for this map !");
+							p.sendMessage("\u00A7cThis checkpoint is alredy used for this map !");
 						}
 						else
 						{
 							FileConfiguration cfg = getConfig();
 							
-							p.sendMessage("§8Checkpoint " + CheckpointNumber + " set on new map " + NewMapNumber);
+							p.sendMessage("\u00A78Checkpoint " + CheckpointNumber + " set on new map " + NewMapNumber);
 
 							cfg.set("Parkour.map" + NewMapNumber + ".cp." + CheckpointNumber + ".posX", bLoc.getX());
 							cfg.set("Parkour.map" + NewMapNumber + ".cp." + CheckpointNumber + ".posY", bLoc.getY());
@@ -1078,12 +1079,12 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					else
 					{
-						p.sendMessage("§cThis checkpoint is alredy used for another map !");
+						p.sendMessage("\u00A7cThis checkpoint is alredy used for another map !");
 					}
 				}
 				else
 				{
-					p.sendMessage("§cUse a stick to place checkpoints (Right click on stone pressure plate)");
+					p.sendMessage("\u00A7cUse a stick to place checkpoints (Right click on stone pressure plate)");
 				}
 			}
 		}
@@ -1115,13 +1116,13 @@ public class Parkour extends JavaPlugin implements Listener
 
 					if (!p.hasPermission("parkour.use"))
 					{
-						p.sendMessage("§cYou don't have permission to do this parkour !");
+						p.sendMessage("\u00A7cYou don't have permission to do this parkour !");
 						return;
 					}
 
 					if (!toggleParkour.get(getCpMapNumber(cLoc.get(bLoc).toString())))
 					{
-						p.sendMessage("This parkour is §4OFF");
+						p.sendMessage("This parkour is \u00A74OFF");
 						return;
 					}
 
@@ -1133,7 +1134,7 @@ public class Parkour extends JavaPlugin implements Listener
 							int Map = getCpMapNumber(cLoc.get(bLoc).toString());
 
 							Parkour.put(p.getName(), (getCpMapNumber(cLoc.get(bLoc).toString()) + "_" + Long.valueOf(System.currentTimeMillis()) + "_1"));
-							p.sendMessage("§aYou have started the parkour on '§b" + getMapName(Map) + "'§a by §2" + getMapCreator(Map) + " §7(§amap" + Map + "§7)");
+							p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b" + getMapName(Map) + "'\u00A7a by \u00A72" + getMapCreator(Map) + " \u00A77(\u00A7amap" + Map + "\u00A77)");
 
 							if (CheckpointEffect)
 							{
@@ -1153,7 +1154,7 @@ public class Parkour extends JavaPlugin implements Listener
 						}
 						else
 						{
-							p.sendMessage("§cYou must start at the checkpoint 1 !");
+							p.sendMessage("\u00A7cYou must start at the checkpoint 1 !");
 						}
 					}
 					else
@@ -1167,7 +1168,7 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (Checkpoint == 1)
 							{
-								p.sendMessage("§aYou have started the parkour on '§b" + getMapName(Map) + "'§a by §2" + getMapCreator(Map) + " §7(§amap" + CpMap + "§7)");
+								p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b" + getMapName(Map) + "'\u00A7a by \u00A72" + getMapCreator(Map) + " \u00A77(\u00A7amap" + CpMap + "\u00A77)");
 								Parkour.put(p.getName(), (getCpMapNumber(cLoc.get(bLoc).toString()) + "_" + Long.valueOf(System.currentTimeMillis()) + "_1"));
 
 								if (CheckpointEffect)
@@ -1189,7 +1190,7 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("§cYou are not in the parkour !");
+								p.sendMessage("\u00A7cYou are not in the parkour !");
 
 							}
 						}
@@ -1214,7 +1215,7 @@ public class Parkour extends JavaPlugin implements Listener
 									p.setFoodLevel(20);
 								}
 
-								p.sendMessage("§aYou have restarted your time !");
+								p.sendMessage("\u00A7aYou have restarted your time !");
 								setPlTime(p.getName(), Long.valueOf(System.currentTimeMillis()));
 								setPlCheckpoint(p.getName(), 1);
 
@@ -1232,13 +1233,13 @@ public class Parkour extends JavaPlugin implements Listener
 								if (!Records.containsKey(Map + ":" + p.getName()))
 								{
 
-									p.sendMessage("§bYou finished this parkour for the first time in " + convertTime(totalTime));
+									p.sendMessage("\u00A7bYou finished this parkour for the first time in " + convertTime(totalTime));
 									Records.put(Map + ":" + p.getName(), totalTime);
 									saveScore();
 
 									if (BroadcastMessage)
 									{
-										getServer().broadcastMessage(BroadcastMsg.replace("&", "§").replaceAll("PLAYER", p.getName()).replaceAll("MAPNAME", getMapName(Map)));
+										getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', BroadcastMsg).replaceAll("PLAYER", p.getName()).replaceAll("MAPNAME", getMapName(Map)));
 									}
 									giveReward(p, Map);
 
@@ -1249,22 +1250,22 @@ public class Parkour extends JavaPlugin implements Listener
 									if (Records.get(Map + ":" + p.getName()) >= totalTime)
 									{
 
-										p.sendMessage("§2You beat your old score !");
-										p.sendMessage("§aYou finished this parkour in " + convertTime(totalTime));
+										p.sendMessage("\u00A72You beat your old score !");
+										p.sendMessage("\u00A7aYou finished this parkour in " + convertTime(totalTime));
 										Records.put(Map + ":" + p.getName(), totalTime);
 										saveScore();
 
 										if (BroadcastMessage)
 										{
-											getServer().broadcastMessage(BroadcastMsg.replace("&", "§").replaceAll("PLAYER", p.getName()).replaceAll("MAPNAME", getMapName(Map)));
+											getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', BroadcastMsg).replaceAll("PLAYER", p.getName()).replaceAll("MAPNAME", getMapName(Map)));
 										}
 										giveReward(p, Map);
 
 									}
 									else
 									{
-										p.sendMessage("§4You don't beat your old score");
-										p.sendMessage("§aYou finished this parkour in " + convertTime(totalTime));
+										p.sendMessage("\u00A74You don't beat your old score");
+										p.sendMessage("\u00A7aYou finished this parkour in " + convertTime(totalTime));
 
 										if (!rewardIfBetterScore)
 										{
@@ -1296,17 +1297,17 @@ public class Parkour extends JavaPlugin implements Listener
 								}
 
 								setPlCheckpoint(p.getName(), Checkpoint);
-								p.sendMessage("§bCheckpoint " + (Checkpoint - 1) + "/" + (TotalCheckpoints - 2) + " reached !");
+								p.sendMessage("\u00A7bCheckpoint " + (Checkpoint - 1) + "/" + (TotalCheckpoints - 2) + " reached !");
 
 							}
 							else if (Checkpoint <= PlCheckpoint)
 							{
-								p.sendMessage("§cYou already reached this checkpoint !");
+								p.sendMessage("\u00A7cYou already reached this checkpoint !");
 
 							}
 							else if (Checkpoint > PlCheckpoint)
 							{
-								p.sendMessage("§cYou forgot to pass the last checkpoint !");
+								p.sendMessage("\u00A7cYou forgot to pass the last checkpoint !");
 
 							}
 						}
@@ -1710,7 +1711,7 @@ public class Parkour extends JavaPlugin implements Listener
 			}
 		}
 
-		getServer().getPlayer(player).sendMessage("§8---=§2Best§8=§2times§8=§7( §b" + getMapName(Integer.parseInt(map)) + "§7 by§2 " + getMapCreator(Integer.parseInt(map)) + " §7(§aMap" + map + "§7) )§8=---");
+		getServer().getPlayer(player).sendMessage("\u00A78---=\u00A72Best\u00A78=\u00A72times\u00A78=\u00A77( \u00A7b" + getMapName(Integer.parseInt(map)) + "\u00A77 by\u00A72 " + getMapCreator(Integer.parseInt(map)) + " \u00A77(\u00A7aMap" + map + "\u00A77) )\u00A78=---");
 
 		//If the player is in top 10
 		boolean PlayerNotInTop = true;
@@ -1725,17 +1726,17 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 				if (i == 0)
 				{
-					getServer().getPlayer(player).sendMessage("§f#§e" + (i + 1) + " §6" + players.get(i) + " - " + convertTime((theTimes.get(i)).longValue()));
+					getServer().getPlayer(player).sendMessage("\u00A7f#\u00A7e" + (i + 1) + " \u00A76" + players.get(i) + " - " + convertTime((theTimes.get(i)).longValue()));
 				}
 				else
 				{
-					getServer().getPlayer(player).sendMessage("§f#§e" + (i + 1) + " §b" + players.get(i) + " - " + convertTime((theTimes.get(i)).longValue()));
+					getServer().getPlayer(player).sendMessage("\u00A7f#\u00A7e" + (i + 1) + " \u00A7b" + players.get(i) + " - " + convertTime((theTimes.get(i)).longValue()));
 				}
 			}
 			if (!PlayerNotInTop)
 			{
-				getServer().getPlayer(player).sendMessage("§8--§aYour§8-§atime§8--");
-				getServer().getPlayer(player).sendMessage("§f#§e" + (i + 1) + " §b" + player + " - " + convertTime((theTimes.get(i)).longValue()));
+				getServer().getPlayer(player).sendMessage("\u00A78--\u00A7aYour\u00A78-\u00A7atime\u00A78--");
+				getServer().getPlayer(player).sendMessage("\u00A7f#\u00A7e" + (i + 1) + " \u00A7b" + player + " - " + convertTime((theTimes.get(i)).longValue()));
 			}
 		}
 	}
@@ -1765,14 +1766,14 @@ public class Parkour extends JavaPlugin implements Listener
 					rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 					if (vault) economy.depositPlayer(p.getName(), rewardMoney);
-					p.sendMessage(rewardMoneyMsg.replace("&", "§").replaceAll("MONEYAMOUNT", "" + rewardMoney));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardMoneyMsg).replaceAll("MONEYAMOUNT", "" + rewardMoney));
 				}
 				if (rewardCommandEnable)
 				{
 					rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 					getServer().dispatchCommand(getServer().getConsoleSender(), rewardCmd.replaceAll("PLAYER", p.getName()));
-					p.sendMessage(rewardCommandMsg.replace("&", "§"));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardCommandMsg));
 				}
 			}
 			else
@@ -1784,14 +1785,14 @@ public class Parkour extends JavaPlugin implements Listener
 						rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 						if (vault) economy.depositPlayer(p.getName(), rewardMoney);
-						p.sendMessage(rewardMoneyMsg.replace("&", "§").replaceAll("MONEYAMOUNT", "" + rewardMoney));
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardMoneyMsg).replaceAll("MONEYAMOUNT", "" + rewardMoney));
 					}
 					if (rewardCommandEnable)
 					{
 						rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 						getServer().dispatchCommand(getServer().getConsoleSender(), rewardCmd.replaceAll("PLAYER", p.getName()));
-						p.sendMessage(rewardCommandMsg.replace("&", "§"));
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardCommandMsg));
 					}
 				}
 				else
