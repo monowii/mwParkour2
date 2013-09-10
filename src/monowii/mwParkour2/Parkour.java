@@ -165,24 +165,24 @@ public class Parkour extends JavaPlugin implements Listener
 
 				if (p.hasPermission("parkour.mapeditor") || p.hasPermission("parkour.admin"))
 				{
-					p.sendMessage("§a/pk new <mapName> <mapCreator>§f  - Create a new map");
-					p.sendMessage("§a/pk done§f  - Confirm and create the map");
-					p.sendMessage("§a/pk remove <mapNumber>§f  - Remove a map");
-					p.sendMessage("§a/pk changeMapName <mapNumber> <newMapName>§f  - Change the map name");
-					p.sendMessage("§a/pk changeMapCreator <mapNumber> <newMapCreator>§f  - Change the Creator");
-					p.sendMessage("§a/pk setSpawn <mapNumber>§f  - Set the map spawn");
+					p.sendMessage("§a/" + CommandLabel + " new <mapName> <mapCreator>§f  - Create a new map");
+					p.sendMessage("§a/" + CommandLabel + " done§f  - Confirm and create the map");
+					p.sendMessage("§a/" + CommandLabel + " remove <mapNumber>§f  - Remove a map");
+					p.sendMessage("§a/" + CommandLabel + " changeMapName <mapNumber> <newMapName>§f  - Change the map name");
+					p.sendMessage("§a/" + CommandLabel + " changeMapCreator <mapNumber> <newMapCreator>§f  - Change the Creator");
+					p.sendMessage("§a/" + CommandLabel + " setSpawn <mapNumber>§f  - Set the map spawn");
 				}
 				if (p.hasPermission("parkour.admin"))
 				{
-					p.sendMessage("§2/pk setLobby§f  - Set the lobby spawn");
-					p.sendMessage("§2/pk toggle <mapNumber>§f  - toggle ON/OFF a parkour");
-					p.sendMessage("§2/pk resetScores <mapNumber>§f  - Reset All scores for a map");
-					p.sendMessage("§2/pk pReset <Player> [<mapNumber> / all]§f  - Reset scores for a player");
+					p.sendMessage("§2/" + CommandLabel + " setLobby§f  - Set the lobby spawn");
+					p.sendMessage("§2/" + CommandLabel + " toggle <mapNumber>§f  - toggle ON/OFF a parkour");
+					p.sendMessage("§2/" + CommandLabel + " resetScores <mapNumber>§f  - Reset All scores for a map");
+					p.sendMessage("§2/" + CommandLabel + " pReset <Player> [<mapNumber> / all]§f  - Reset scores for a player");
 				}
-				p.sendMessage("/§7pk MapList§f  - Show all the maps");
-				p.sendMessage("/§7pk best <MapNumber>§f  - Show the best score of a map");
-				p.sendMessage("/§7pk leave§f - Left the map");
-				p.sendMessage("/§7pk join <mapNumber>§f - Join a map");
+				p.sendMessage("/§7" + CommandLabel + " MapList§f  - Show all the maps");
+				p.sendMessage("/§7" + CommandLabel + " best <MapNumber>§f  - Show the best score of a map");
+				p.sendMessage("/§7" + CommandLabel + " leave§f - Left the map");
+				p.sendMessage("/§7" + CommandLabel + " join <mapNumber>§f - Join a map");
 			}
 			else
 			{
