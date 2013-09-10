@@ -168,8 +168,8 @@ public class Parkour extends JavaPlugin implements Listener
 					p.sendMessage("§a/pk new <mapName> <mapCreator>§f  - Create a new map");
 					p.sendMessage("§a/pk done§f  - Confirm and create the map");
 					p.sendMessage("§a/pk remove <mapNumber>§f  - Remove a map");
-					p.sendMessage("§a/pk changeMapName <mapNumber> <newMapName>§f  - Change the Creator");
-					p.sendMessage("§a/pk changeMapCreator <mapNumber> <newMapCreator>§f  - Change the map name");
+					p.sendMessage("§a/pk changeMapName <mapNumber> <newMapName>§f  - Change the map name");
+					p.sendMessage("§a/pk changeMapCreator <mapNumber> <newMapCreator>§f  - Change the Creator");
 					p.sendMessage("§a/pk setSpawn <mapNumber>§f  - Set the map spawn");
 				}
 				if (p.hasPermission("parkour.admin"))
