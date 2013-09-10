@@ -86,6 +86,8 @@ public class Parkour extends JavaPlugin implements Listener
 	boolean LastCheckpointTeleport = false;
 	boolean rewardEnable = false;
 	boolean rewardIfBetterScore = true;
+	
+	boolean vault;
 
 	//Used for player parkour management
 	Location lobby = null;
@@ -102,9 +104,9 @@ public class Parkour extends JavaPlugin implements Listener
 
 	public void onEnable()
 	{
-		setupEconomy();
-
 		LoadCfg();
+		
+		this.vault = setupEconomy();
 
 		try
 		{
@@ -140,6 +142,14 @@ public class Parkour extends JavaPlugin implements Listener
 
 	private boolean setupEconomy()
 	{
+		try {
+			Class.forName("net.milkbowl.vault.economy.Economy");
+		} catch (ClassNotFoundException e) {
+			debug("Vault not found. Disabling money reward.");
+			getConfig().set("rewards.money.enable", false);
+			saveConfig();
+			return false;
+		}
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null)
 		{
@@ -696,7 +706,7 @@ public class Parkour extends JavaPlugin implements Listener
 		return false;
 	}
 
-	/////////////////////////////////
+	////////////////////////////////
 	// _____                _       
 	//|  ___|              | |      
 	//| |____   _____ _ __ | |_ ___ 
@@ -1754,7 +1764,7 @@ public class Parkour extends JavaPlugin implements Listener
 				{
 					rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
-					economy.depositPlayer(p.getName(), rewardMoney);
+					if (vault) economy.depositPlayer(p.getName(), rewardMoney);
 					p.sendMessage(rewardMoneyMsg.replace("&", "§").replaceAll("MONEYAMOUNT", "" + rewardMoney));
 				}
 				if (rewardCommandEnable)
@@ -1773,7 +1783,7 @@ public class Parkour extends JavaPlugin implements Listener
 					{
 						rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
-						economy.depositPlayer(p.getName(), rewardMoney);
+						if (vault) economy.depositPlayer(p.getName(), rewardMoney);
 						p.sendMessage(rewardMoneyMsg.replace("&", "§").replaceAll("MONEYAMOUNT", "" + rewardMoney));
 					}
 					if (rewardCommandEnable)
