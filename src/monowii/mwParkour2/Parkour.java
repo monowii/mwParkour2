@@ -581,7 +581,7 @@ public class Parkour extends JavaPlugin implements Listener
 								if (!PlayerFound)
 								{
 									p.sendMessage("§cPlayer not found in this scoreboard !");
-									return false;
+									return true;
 								}
 
 								if (DeleteOnAllMaps)
@@ -703,7 +703,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	////////////////////////////////
