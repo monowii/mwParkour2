@@ -58,10 +58,10 @@ public class Parkour extends JavaPlugin implements Listener
 	 * Better performance onPlayerInteract
 	 * new Special signs: joinLastMap / lastBestScores
 	 * better teleportation with lava / water
-	 */
-
-	/* TODO
 	 * 
+	 * 1.5.6
+	 * Water and lava respawn can no be activated for each map, not global for all maps
+	 * Works perfectly with 1.6!
 	 */
 
 	static Economy economy = null;
@@ -81,8 +81,6 @@ public class Parkour extends JavaPlugin implements Listener
 	String BroadcastMsg = "&emwParkour2&f>&8 New record for &7PLAYER &8on map MAPNAME !";
 	boolean CheckpointEffect = true;
 	boolean InvincibleWhileParkour = true;
-	boolean RespawnOnLava = false;
-	boolean RespawnOnWater = false;
 	boolean FullHunger = false;
 	boolean LastCheckpointTeleport = false;
 	boolean rewardEnable = false;
@@ -182,6 +180,8 @@ public class Parkour extends JavaPlugin implements Listener
 					p.sendMessage("\u00A7a/" + CommandLabel + " changeMapName <mapNumber> <newMapName>\u00A7f  - Change the map name");
 					p.sendMessage("\u00A7a/" + CommandLabel + " changeMapCreator <mapNumber> <newMapCreator>\u00A7f  - Change the Creator");
 					p.sendMessage("\u00A7a/" + CommandLabel + " setSpawn <mapNumber>\u00A7f  - Set the map spawn");
+					p.sendMessage("\u00A7a/" + CommandLabel + " toggleWaterRespawn <mapNumber>\u00A7f  - Toggles Water repsawn on this Map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " toggleLavaRespawn <mapNumber>\u00A7f  - Toggles Lava Respawn on this Map");
 				}
 				if (p.hasPermission("parkour.admin"))
 				{
@@ -396,6 +396,8 @@ public class Parkour extends JavaPlugin implements Listener
 								cfg.set("Parkour.map" + NewMapNumber + ".mapCreator", newMapCreator);
 								cfg.set("Parkour.map" + NewMapNumber + ".nombreCp", (CheckpointNumber - 1));
 								cfg.set("Parkour.map" + NewMapNumber + ".toggle", true);
+								cfg.set("Parkour.map" + NewMapNumber + ".waterrespawn", false);
+								cfg.set("Parkour.map" + NewMapNumber + ".lavarespawn", false);
 
 								saveConfig();
 								intMaps();
@@ -521,7 +523,74 @@ public class Parkour extends JavaPlugin implements Listener
 						p.sendMessage("You don't specify the map !");
 					}
 				}
+				else if (args[0].equalsIgnoreCase("toggleWaterRespawn") && (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
+				{
+					if (args.length == 2)
+					{
+						if (isNumber(args[1]))
+						{
+							if (maps.contains(toInt(args[1])))
+							{
+								FileConfiguration cfg = getConfig();
+								String mapNumber = args[1].toString();
+								boolean isActive = !cfg.getBoolean("Parkour.map" + mapNumber + ".waterrespawn");
+								cfg.set("Parkour.map" + mapNumber + ".waterrespawn", isActive);
+								saveConfig();
+								if (isActive)
+									p.sendMessage("\u00A7aWaterrespawn is now ON for map \u00A72map" + mapNumber + "\u00A7f !");
+								else
+									p.sendMessage("\u00A7aWaterrespawn is now OFF for map \u00A72map" + mapNumber + "\u00A7f !");
+							}
+							else
+							{
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
+							}
+						}
+						else
+						{
+							p.sendMessage("\u00A7cIt is not a valid number !");
+						}
 
+					}
+					else
+					{
+						p.sendMessage("You don't specify the map !");
+					}
+				}
+				else if (args[0].equalsIgnoreCase("toggleLavaRespawn") && (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
+				{
+					if (args.length == 2)
+					{
+						if (isNumber(args[1]))
+						{
+							if (maps.contains(toInt(args[1])))
+							{
+								FileConfiguration cfg = getConfig();
+								String mapNumber = args[1].toString();
+								boolean isActive = !cfg.getBoolean("Parkour.map" + mapNumber + ".lavarespawn");
+								cfg.set("Parkour.map" + mapNumber + ".lavarespawn", isActive);
+								saveConfig();
+								if (isActive)
+									p.sendMessage("\u00A7aLavarespawn is now ON for map \u00A72map" + mapNumber + "\u00A7f !");
+								else
+									p.sendMessage("\u00A7aLavarespawn is now OFF for map \u00A72map" + mapNumber + "\u00A7f !");
+							}
+							else
+							{
+								p.sendMessage("\u00A7cIt is not a valid mapNumber !");
+							}
+						}
+						else
+						{
+							p.sendMessage("\u00A7cIt is not a valid number !");
+						}
+
+					}
+					else
+					{
+						p.sendMessage("You don't specify the map !");
+					}
+				}
 				else if (args[0].equalsIgnoreCase("setLobby") && p.hasPermission("parkour.admin"))
 				{
 					FileConfiguration cfg = getConfig();
@@ -1099,6 +1168,9 @@ public class Parkour extends JavaPlugin implements Listener
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e)
 	{
+		
+		Player p = e.getPlayer();
+		
 		if (((int) e.getFrom().getX() != (int) e.getTo().getX()) || ((int) e.getFrom().getY() != (int) e.getTo().getY()) || ((int) e.getFrom().getZ() != (int) e.getTo().getZ()))
 		{
 			if (e.getTo().getBlock().getTypeId() == 70)
@@ -1110,8 +1182,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 				if (cLoc.containsKey(bLoc))
 				{
-					Player p = e.getPlayer();
-
+					
 					int Checkpoint = getCheckpoint(cLoc.get(bLoc).toString());
 
 					if (!p.hasPermission("parkour.use"))
@@ -1314,15 +1385,19 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 				}
 			}
-			if ((e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER) && RespawnOnWater)
+			if (Parkour.containsKey(p.getName()))
 			{
-				if (Parkour.containsKey(e.getPlayer().getName()))
-					teleportLastCheckpoint(e.getPlayer());
-			}
-			if ((e.getTo().getBlock().getType() == Material.LAVA || e.getTo().getBlock().getType() == Material.STATIONARY_LAVA) && RespawnOnLava)
-			{
-				if (Parkour.containsKey(e.getPlayer().getName()))
-					teleportLastCheckpoint(e.getPlayer());
+				int Map = getPlMapNumber(Parkour.get(p.getName()).toString());
+				if ((e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER))
+				{
+					if (getConfig().getBoolean("Parkour.map" + Map + ".waterrespawn"))
+						teleportLastCheckpoint(e.getPlayer());
+				}
+				if ((e.getTo().getBlock().getType() == Material.LAVA || e.getTo().getBlock().getType() == Material.STATIONARY_LAVA))
+				{
+					if (getConfig().getBoolean("Parkour.map" + Map + ".lavarespawn"))
+						teleportLastCheckpoint(e.getPlayer());
+				}
 			}
 		}
 	}
@@ -1570,8 +1645,6 @@ public class Parkour extends JavaPlugin implements Listener
 
 		removePotionsEffectsOnParkour = cfg.getBoolean("options.removePotionsEffectsOnParkour");
 		InvincibleWhileParkour = cfg.getBoolean("options.InvincibleWhileParkour");
-		RespawnOnLava = cfg.getBoolean("options.RespawnOnLava");
-		RespawnOnWater = cfg.getBoolean("options.RespawnOnWater");
 		CheckpointEffect = cfg.getBoolean("options.CheckpointEffect");
 		BroadcastMessage = cfg.getBoolean("options.BroadcastOnRecord.enable");
 		FullHunger = cfg.getBoolean("options.BroadcastOnRecord.enable");
