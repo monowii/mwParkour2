@@ -663,16 +663,7 @@ public class Parkour extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onSignChange(SignChangeEvent e) {
-		if (e.getLine(0).equalsIgnoreCase("[mwParkour2]") && !e.getPlayer().hasPermission("parkour.mapeditor")) // Block
-																												// player
-																												// try
-																												// to
-																												// bypass
-																												// permissions
-																												// for
-																												// place
-																												// signs
-		{
+		if (e.getLine(0).equalsIgnoreCase("[mwParkour2]") && !e.getPlayer().hasPermission("parkour.mapeditor")) {
 			e.setCancelled(true);
 		}
 
@@ -1234,23 +1225,6 @@ public class Parkour extends JavaPlugin implements Listener {
 		return getConfig().getInt("Parkour.map" + mapNumber + ".nombreCp");
 	}
 
-	private String getMapCreator(int mapNumber) {
-		if (getConfig().contains("Parkour.map" + mapNumber + ".mapCreator")) {
-			return getConfig().getString("Parkour.map" + mapNumber + ".mapCreator");
-
-		} else {
-			return "unknownCreator";
-		}
-	}
-
-	private String getMapName(int mapNumber) {
-		if (getConfig().contains("Parkour.map" + mapNumber + ".mapName")) {
-			return getConfig().getString("Parkour.map" + mapNumber + ".mapName");
-		} else {
-			return "unknownMapName";
-		}
-	}
-
 	private boolean mapExist(String MapNumber) {
 		if (getConfig().getInt("Parkour.map" + MapNumber + ".nombreCp") != 0) {
 			return true;
@@ -1582,5 +1556,31 @@ public class Parkour extends JavaPlugin implements Listener {
 					+ convertTime(records.get(player.getName()).longValue()));
 
 		}
+	}
+
+	public String getMapName(int mapNumber) {
+		if (getConfig().contains("Parkour.map" + mapNumber + ".mapName")) {
+			return getConfig().getString("Parkour.map" + mapNumber + ".mapName");
+		} else {
+			return "unknownMapName";
+		}
+	}
+
+	public String getMapCreator(int mapNumber) {
+		if (getConfig().contains("Parkour.map" + mapNumber + ".mapCreator")) {
+			return getConfig().getString("Parkour.map" + mapNumber + ".mapCreator");
+
+		} else {
+			return "unknownCreator";
+		}
+	}
+
+	public int getMapId(String mapName) {
+		for (int i : maps) {
+			if (getConfig().getString("Parkour.map" + i + ".mapName").equals(mapName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }
