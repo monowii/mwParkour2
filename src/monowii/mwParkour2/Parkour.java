@@ -61,6 +61,8 @@ public class Parkour extends JavaPlugin implements Listener {
 	 * 1.5.6 Water and lava respawn can no be activated for each map, not global for all maps Works perfectly with 1.6!
 	 * 
 	 * 1.5.7 A bit of an API
+	 * 
+	 * 1.5.8 /reload works
 	 */
 
 	static Economy economy = null;
@@ -130,6 +132,25 @@ public class Parkour extends JavaPlugin implements Listener {
 		loadToggleMap();
 		loadLobby();
 		intCheckpointsLoc();
+	}
+
+	@Override
+	public void onDisable() {
+		// Reset everything
+		newMap = false;
+		newMapCheckpoints.clear();
+		newMapCreator = "";
+		newMapName = "";
+		newMapPlayerEditor = "";
+		NewMapNumber = 0;
+		CheckpointNumber = 0;
+
+		maps.clear();
+		toggleParkour.clear();
+		cLoc.clear();
+		Parkour.clear();
+		Records.clear();
+		rewardPlayersCooldown.clear();
 	}
 
 	private boolean setupEconomy() {
@@ -1577,9 +1598,7 @@ public class Parkour extends JavaPlugin implements Listener {
 
 	public int getMapId(String mapName) {
 		for (int i : maps) {
-			if (getConfig().getString("Parkour.map" + i + ".mapName").equals(mapName)) {
-				return i;
-			}
+			if (getConfig().getString("Parkour.map" + i + ".mapName").equals(mapName)) { return i; }
 		}
 		return -1;
 	}
