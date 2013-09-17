@@ -9,15 +9,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import monowii.mwParkour2.events.ParkourCheckpointEvent;
+import monowii.mwParkour2.events.ParkourFinishEvent;
+import monowii.mwParkour2.events.ParkourStartEvent;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.ChatColor;
@@ -641,14 +644,7 @@ public class Parkour extends JavaPlugin implements Listener {
 		return true;
 	}
 
-	// //////////////////////////////
-	// _____ _
-	// | ___| | |
-	// | |____ _____ _ __ | |_ ___
-	// | __\ \ / / _ \ '_ \| __/ __|
-	// | |___\ V / __/ | | | |_\__ \
-	// \____/ \_/ \___|_| |_|\__|___/
-	// //////////////////////////////
+	// =================== EVENTS ===================
 
 	@EventHandler
 	public void onDisco(PlayerQuitEvent e) {
@@ -666,7 +662,6 @@ public class Parkour extends JavaPlugin implements Listener {
 			CheckpointNumber = 0;
 			NewMapNumber = 0;
 			newMap = false;
-			System.out.println("playerEditor has left");
 		}
 	}
 
@@ -953,7 +948,7 @@ public class Parkour extends JavaPlugin implements Listener {
 		if (((int) e.getFrom().getX() != (int) e.getTo().getX())
 				|| ((int) e.getFrom().getY() != (int) e.getTo().getY())
 				|| ((int) e.getFrom().getZ() != (int) e.getTo().getZ())) {
-			if (e.getTo().getBlock().getTypeId() == 70) {
+			if (e.getTo().getBlock().getType() == Material.STONE_PLATE) {
 				int x = (int) e.getTo().getBlock().getX();
 				int y = (int) e.getTo().getBlock().getY();
 				int z = (int) e.getTo().getBlock().getZ();
@@ -977,7 +972,9 @@ public class Parkour extends JavaPlugin implements Listener {
 
 						if (Checkpoint == 1) {
 							int Map = getCpMapNumber(cLoc.get(bLoc).toString());
-
+							
+							getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, false));
+							
 							Parkour.put(
 									p.getName(),
 									(getCpMapNumber(cLoc.get(bLoc).toString()) + "_"
@@ -1008,6 +1005,8 @@ public class Parkour extends JavaPlugin implements Listener {
 
 						if (CpMap != Map) {
 							if (Checkpoint == 1) {
+								getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, false));
+								
 								p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b" + getMapName(Map)
 										+ "'\u00A7a by \u00A72" + getMapCreator(Map) + " \u00A77(\u00A7amap" + CpMap
 										+ "\u00A77)");
@@ -1015,7 +1014,7 @@ public class Parkour extends JavaPlugin implements Listener {
 										p.getName(),
 										(getCpMapNumber(cLoc.get(bLoc).toString()) + "_"
 												+ Long.valueOf(System.currentTimeMillis()) + "_1"));
-
+								
 								if (CheckpointEffect) {
 									p.playEffect(bLoc, Effect.POTION_BREAK, 2);
 								}
@@ -1046,7 +1045,7 @@ public class Parkour extends JavaPlugin implements Listener {
 								if (FullHunger) {
 									p.setFoodLevel(20);
 								}
-
+								getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, true));
 								p.sendMessage("\u00A7aYou have restarted your time !");
 								setPlTime(p.getName(), Long.valueOf(System.currentTimeMillis()));
 								setPlCheckpoint(p.getName(), 1);
@@ -1057,11 +1056,11 @@ public class Parkour extends JavaPlugin implements Listener {
 								}
 
 								long totalTime = System.currentTimeMillis()
-										- Long.valueOf(getPlTime(Parkour.get(p.getName()).toString()));
+										- Long.valueOf(getPlTime(Parkour.get(p.getName())));
 								Parkour.remove(p.getName());
 
 								if (!Records.containsKey(Map + ":" + p.getName())) {
-
+									getServer().getPluginManager().callEvent(new ParkourFinishEvent(p, Map, totalTime, true));
 									p.sendMessage("\u00A7bYou finished this parkour for the first time in "
 											+ convertTime(totalTime));
 									Records.put(Map + ":" + p.getName(), totalTime);
@@ -1100,6 +1099,8 @@ public class Parkour extends JavaPlugin implements Listener {
 											giveReward(p, Map);
 										}
 									}
+									
+									getServer().getPluginManager().callEvent(new ParkourFinishEvent(p, Map, totalTime, false));
 
 								}
 
@@ -1121,6 +1122,7 @@ public class Parkour extends JavaPlugin implements Listener {
 								setPlCheckpoint(p.getName(), Checkpoint);
 								p.sendMessage("\u00A7bCheckpoint " + (Checkpoint - 1) + "/" + (TotalCheckpoints - 2)
 										+ " reached !");
+								getServer().getPluginManager().callEvent(new ParkourCheckpointEvent(p, Map, (Checkpoint-1), System.currentTimeMillis() - getPlTime(Parkour.get(p.getName()))));
 
 							} else if (Checkpoint <= PlCheckpoint) {
 								p.sendMessage("\u00A7cYou already reached this checkpoint !");
@@ -1147,14 +1149,8 @@ public class Parkour extends JavaPlugin implements Listener {
 		}
 	}
 
-	// /////////////////////////////////////////////
-	// ______ _ _
-	// | ___| | | (_)
-	// | |_ ___ _ __ ___| |_ _ ___ _ __ ___
-	// | _/ _ \| '_ \ / __| __| |/ _ \| '_ \/ __|
-	// | || (_) | | | | (__| |_| | (_) | | | \__ \
-	// \_| \___/|_| |_|\___|\__|_|\___/|_| |_|___/
-	// /////////////////////////////////////////////
+
+	// =================== FUNCTIONS ===================
 
 	private void teleportLastCheckpoint(Player p) {
 		FileConfiguration cfg = getConfig();
@@ -1494,7 +1490,7 @@ public class Parkour extends JavaPlugin implements Listener {
 	}
 
 	// Public API
-
+	
 	/**
 	 * Returns all Records on the given Map - <Playername, Time>
 	 * 

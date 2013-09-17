@@ -1,5 +1,5 @@
 name: mwParkour2
-version: 1.5.8
+version: 1.5.9
 description: monowii's parkour plugin
 author: monowii
 softdepend: [Vault]
