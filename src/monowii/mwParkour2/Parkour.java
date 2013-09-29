@@ -58,14 +58,9 @@ public class Parkour extends JavaPlugin implements Listener {
 	 */
 
 	/*
-	 * 1.5.5 Changelog Better performance onPlayerInteract new Special signs: joinLastMap / lastBestScores better
-	 * teleportation with lava / water
-	 * 
-	 * 1.5.6 Water and lava respawn can no be activated for each map, not global for all maps Works perfectly with 1.6!
-	 * 
-	 * 1.5.7 A bit of an API
-	 * 
 	 * 1.5.8 /reload works
+	 * 
+	 * 1.5.9 Added custom parkour events, fixec critical checkpoints issues
 	 */
 
 	static Economy economy = null;
@@ -154,6 +149,12 @@ public class Parkour extends JavaPlugin implements Listener {
 		Parkour.clear();
 		Records.clear();
 		rewardPlayersCooldown.clear();
+		
+		intMaps();
+		loadScore();
+		loadToggleMap();
+		loadLobby();
+		intCheckpointsLoc();
 	}
 
 	private boolean setupEconomy() {
@@ -531,7 +532,7 @@ public class Parkour extends JavaPlugin implements Listener {
 								String mapNumber = args[2];
 
 								Iterator<String> it = Records.keySet().iterator();
-
+								
 								while (it.hasNext()) {
 									String key = it.next();
 									String[] KeySplit = key.split(":");
