@@ -16,8 +16,6 @@ public class ParkourStartEvent extends Event
 		this.player = player;
 		this.MapNumber = MapNumber;
 		this.restart = restart;
-		
-		System.out.println("mwParkour Start Event");
 	}
 	
 	public Player getPlayer() {
