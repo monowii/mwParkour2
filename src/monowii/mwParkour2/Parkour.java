@@ -98,8 +98,7 @@ public class Parkour extends JavaPlugin implements Listener
 	HashMap<String, Long> rewardPlayersCooldown = new HashMap<String, Long>(); // HashMap infos> playerName : LastRewardTime
 
 	// Used for saveing/loading scores
-	String path = "plugins" + File.separator + "mwParkour2" + File.separator
-			+ "PlayersScores.scores";
+	String path = "plugins" + File.separator + "mwParkour2" + File.separator + "PlayersScores.scores";
 	File scores = new File(path);
 
 	public void onEnable()
@@ -180,8 +179,7 @@ public class Parkour extends JavaPlugin implements Listener
 			return false;
 		}
 		RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> economyProvider = getServer()
-				.getServicesManager().getRegistration(
-						net.milkbowl.vault.economy.Economy.class);
+				.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null)
 		{
 			economy = economyProvider.getProvider();
@@ -190,8 +188,7 @@ public class Parkour extends JavaPlugin implements Listener
 		return (economy != null);
 	}
 
-	public boolean onCommand(CommandSender sender, Command cmd, String CommandLabel,
-			String[] args)
+	public boolean onCommand(CommandSender sender, Command cmd, String CommandLabel, String[] args)
 	{
 		Player p = null;
 		if (sender instanceof Player)
@@ -203,54 +200,37 @@ public class Parkour extends JavaPlugin implements Listener
 		{
 			if (args.length == 0)
 			{
-				p.sendMessage("\u00A76---------=[ \u00A78mwParkour2 v"
-						+ getDescription().getVersion()
+				p.sendMessage("\u00A76---------=[ \u00A78mwParkour2 v" + getDescription().getVersion()
 						+ " by monowii \u00A76]=---------");
 
-				if (p.hasPermission("parkour.mapeditor")
-						|| p.hasPermission("parkour.admin"))
+				if (p.hasPermission("parkour.mapeditor") || p.hasPermission("parkour.admin"))
 				{
+					p.sendMessage("\u00A7a/" + CommandLabel + " new <mapName> <mapCreator>\u00A7f  - Create a new map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " done\u00A7f  - Confirm and create the map");
+					p.sendMessage("\u00A7a/" + CommandLabel + " remove <mapNumber>\u00A7f  - Remove a map");
 					p.sendMessage("\u00A7a/" + CommandLabel
-							+ " new <mapName> <mapCreator>\u00A7f  - Create a new map");
-					p.sendMessage("\u00A7a/" + CommandLabel
-							+ " done\u00A7f  - Confirm and create the map");
-					p.sendMessage("\u00A7a/" + CommandLabel
-							+ " remove <mapNumber>\u00A7f  - Remove a map");
-					p.sendMessage("\u00A7a/"
-							+ CommandLabel
 							+ " changeMapName <mapNumber> <newMapName>\u00A7f  - Change the map name");
-					p.sendMessage("\u00A7a/"
-							+ CommandLabel
-							+ " changeMapCreator <mapNumber> <newMapCreator>\u00A7f  - Change the Creator");
 					p.sendMessage("\u00A7a/" + CommandLabel
-							+ " setSpawn <mapNumber>\u00A7f  - Set the map spawn");
-					p.sendMessage("\u00A7a/"
-							+ CommandLabel
+							+ " changeMapCreator <mapNumber> <newMapCreator>\u00A7f  - Change the Creator");
+					p.sendMessage("\u00A7a/" + CommandLabel + " setSpawn <mapNumber>\u00A7f  - Set the map spawn");
+					p.sendMessage("\u00A7a/" + CommandLabel
 							+ " toggleWaterRespawn <mapNumber>\u00A7f  - Toggles Water repsawn on this Map");
-					p.sendMessage("\u00A7a/"
-							+ CommandLabel
+					p.sendMessage("\u00A7a/" + CommandLabel
 							+ " toggleLavaRespawn <mapNumber>\u00A7f  - Toggles Lava Respawn on this Map");
 				}
 				if (p.hasPermission("parkour.admin"))
 				{
+					p.sendMessage("\u00A72/" + CommandLabel + " setLobby\u00A7f  - Set the lobby spawn");
+					p.sendMessage("\u00A72/" + CommandLabel + " toggle <mapNumber>\u00A7f  - toggle ON/OFF a parkour");
 					p.sendMessage("\u00A72/" + CommandLabel
-							+ " setLobby\u00A7f  - Set the lobby spawn");
-					p.sendMessage("\u00A72/" + CommandLabel
-							+ " toggle <mapNumber>\u00A7f  - toggle ON/OFF a parkour");
-					p.sendMessage("\u00A72/"
-							+ CommandLabel
 							+ " resetScores <mapNumber>\u00A7f  - Reset All scores for a map");
-					p.sendMessage("\u00A72/"
-							+ CommandLabel
+					p.sendMessage("\u00A72/" + CommandLabel
 							+ " pReset <Player> [<mapNumber> / all]\u00A7f  - Reset scores for a player");
 				}
-				p.sendMessage("/\u00A77" + CommandLabel
-						+ " MapList\u00A7f  - Show all the maps");
-				p.sendMessage("/\u00A77" + CommandLabel
-						+ " best <MapNumber>\u00A7f  - Show the best score of a map");
+				p.sendMessage("/\u00A77" + CommandLabel + " MapList\u00A7f  - Show all the maps");
+				p.sendMessage("/\u00A77" + CommandLabel + " best <MapNumber>\u00A7f  - Show the best score of a map");
 				p.sendMessage("/\u00A77" + CommandLabel + " leave\u00A7f - Left the map");
-				p.sendMessage("/\u00A77" + CommandLabel
-						+ " join <mapNumber>\u00A7f - Join a map");
+				p.sendMessage("/\u00A77" + CommandLabel + " join <mapNumber>\u00A7f - Join a map");
 			}
 			else
 			{
@@ -273,19 +253,12 @@ public class Parkour extends JavaPlugin implements Listener
 								if (cfg.contains("Parkour.map" + args[1] + ".spawn"))
 								{
 									Location loc = new Location(getServer().getWorld(
-											getConfig().get(
-													"Parkour.map" + args[1] + ".world")
-													.toString()),
-											cfg.getDouble("Parkour.map" + args[1]
-													+ ".spawn.posX"),
-											cfg.getDouble("Parkour.map" + args[1]
-													+ ".spawn.posY"),
-											cfg.getDouble("Parkour.map" + args[1]
-													+ ".spawn.posZ"));
-									loc.setPitch((float) cfg.getDouble("Parkour.map"
-											+ args[1] + ".spawn.posPitch"));
-									loc.setYaw((float) cfg.getDouble("Parkour.map"
-											+ args[1] + ".spawn.posYaw"));
+											getConfig().get("Parkour.map" + args[1] + ".world").toString()),
+											cfg.getDouble("Parkour.map" + args[1] + ".spawn.posX"),
+											cfg.getDouble("Parkour.map" + args[1] + ".spawn.posY"),
+											cfg.getDouble("Parkour.map" + args[1] + ".spawn.posZ"));
+									loc.setPitch((float) cfg.getDouble("Parkour.map" + args[1] + ".spawn.posPitch"));
+									loc.setYaw((float) cfg.getDouble("Parkour.map" + args[1] + ".spawn.posYaw"));
 
 									p.teleport(loc);
 								}
@@ -329,8 +302,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 
 				else if (args[0].equalsIgnoreCase("remove")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 2)
 					{
@@ -339,18 +311,13 @@ public class Parkour extends JavaPlugin implements Listener
 							if (maps.contains(toInt(args[1])))
 							{
 								String mapNumber = args[1].toString();
-								getConfig().getConfigurationSection("Parkour").set(
-										"map" + mapNumber, null);
-								getConfig().set(
-										"Parkour.mapsNombre",
-										Integer.valueOf(getConfig().getInt(
-												"Parkour.mapsNombre") - 1));
+								getConfig().getConfigurationSection("Parkour").set("map" + mapNumber, null);
+								getConfig().set("Parkour.mapsNombre",
+										Integer.valueOf(getConfig().getInt("Parkour.mapsNombre") - 1));
 								saveConfig();
-								p.sendMessage("\u00A72map" + mapNumber
-										+ "\u00A7f is now deleted !");
+								p.sendMessage("\u00A72map" + mapNumber + "\u00A7f is now deleted !");
 
-								for (Iterator<String> it = Records.keySet().iterator(); it
-										.hasNext();)
+								for (Iterator<String> it = Records.keySet().iterator(); it.hasNext();)
 								{
 									String key = it.next();
 									String[] KeySplit = key.split(":");
@@ -380,8 +347,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 				}
 
-				else if (args[0].equalsIgnoreCase("toggle")
-						&& p.hasPermission("parkour.admin"))
+				else if (args[0].equalsIgnoreCase("toggle") && p.hasPermission("parkour.admin"))
 				{
 					if (args.length == 2)
 					{
@@ -389,19 +355,16 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (maps.contains(toInt(args[1])))
 							{
-								if (getConfig().getBoolean(
-										"Parkour.map" + args[1] + ".toggle"))
+								if (getConfig().getBoolean("Parkour.map" + args[1] + ".toggle"))
 								{
 									p.sendMessage("Map toggle to \u00A74OFF");
-									getConfig().set("Parkour.map" + args[1] + ".toggle",
-											false);
+									getConfig().set("Parkour.map" + args[1] + ".toggle", false);
 									saveConfig();
 								}
 								else
 								{
 									p.sendMessage("Map toggle to \u00A7aON");
-									getConfig().set("Parkour.map" + args[1] + ".toggle",
-											true);
+									getConfig().set("Parkour.map" + args[1] + ".toggle", true);
 									saveConfig();
 								}
 								loadToggleMap();
@@ -423,8 +386,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 
 				else if (args[0].equalsIgnoreCase("new")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 3)
 					{
@@ -442,8 +404,7 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								p.sendMessage("\u00A7cA player is already using the MapEditor ("
-										+ newMapPlayerEditor
+								p.sendMessage("\u00A7cA player is already using the MapEditor (" + newMapPlayerEditor
 										+ ") ! You must wait a bit !");
 							}
 						}
@@ -459,8 +420,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 
 				else if (args[0].equalsIgnoreCase("done")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (!newMap)
 					{
@@ -472,26 +432,18 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (CheckpointNumber >= 3)
 							{
-								p.sendMessage("\u00A7a" + newMapName + "(map"
-										+ NewMapNumber
+								p.sendMessage("\u00A7a" + newMapName + "(map" + NewMapNumber
 										+ ") created ! \u00A7fMapEditor \u00A74OFF");
 
 								FileConfiguration cfg = getConfig();
-								cfg.set("Parkour.mapsNombre",
-										(getConfig().getInt("Parkour.mapsNombre")) + 1);
-								cfg.set("Parkour.map" + NewMapNumber + ".world", p
-										.getWorld().getName());
-								cfg.set("Parkour.map" + NewMapNumber + ".mapName",
-										newMapName);
-								cfg.set("Parkour.map" + NewMapNumber + ".mapCreator",
-										newMapCreator);
-								cfg.set("Parkour.map" + NewMapNumber + ".nombreCp",
-										(CheckpointNumber - 1));
+								cfg.set("Parkour.mapsNombre", (getConfig().getInt("Parkour.mapsNombre")) + 1);
+								cfg.set("Parkour.map" + NewMapNumber + ".world", p.getWorld().getName());
+								cfg.set("Parkour.map" + NewMapNumber + ".mapName", newMapName);
+								cfg.set("Parkour.map" + NewMapNumber + ".mapCreator", newMapCreator);
+								cfg.set("Parkour.map" + NewMapNumber + ".nombreCp", (CheckpointNumber - 1));
 								cfg.set("Parkour.map" + NewMapNumber + ".toggle", true);
-								cfg.set("Parkour.map" + NewMapNumber + ".waterrespawn",
-										false);
-								cfg.set("Parkour.map" + NewMapNumber + ".lavarespawn",
-										false);
+								cfg.set("Parkour.map" + NewMapNumber + ".waterrespawn", false);
+								cfg.set("Parkour.map" + NewMapNumber + ".lavarespawn", false);
 
 								saveConfig();
 								intMaps();
@@ -522,15 +474,14 @@ public class Parkour extends JavaPlugin implements Listener
 						}
 						else
 						{
-							p.sendMessage("\u00A7cA player is already using the MapEditor ("
-									+ newMapPlayerEditor + ") ! You must wait a bit !");
+							p.sendMessage("\u00A7cA player is already using the MapEditor (" + newMapPlayerEditor
+									+ ") ! You must wait a bit !");
 						}
 					}
 				}
 
 				else if (args[0].equalsIgnoreCase("changeMapName")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 3)
 					{
@@ -538,11 +489,10 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (maps.contains(toInt(args[1])))
 							{
-								getConfig().set("Parkour.map" + args[1] + ".mapName",
-										args[2]);
+								getConfig().set("Parkour.map" + args[1] + ".mapName", args[2]);
 								saveConfig();
-								p.sendMessage("\u00A7aMap name set to '\u00A7b" + args[2]
-										+ "'\u00A7a for map" + args[1]);
+								p.sendMessage("\u00A7aMap name set to '\u00A7b" + args[2] + "'\u00A7a for map"
+										+ args[1]);
 							}
 							else
 							{
@@ -561,8 +511,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 
 				else if (args[0].equalsIgnoreCase("changeMapCreator")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 3)
 					{
@@ -570,11 +519,9 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (maps.contains(toInt(args[1])))
 							{
-								getConfig().set("Parkour.map" + args[1] + ".mapCreator",
-										args[2]);
+								getConfig().set("Parkour.map" + args[1] + ".mapCreator", args[2]);
 								saveConfig();
-								p.sendMessage("\u00A7aCreator set to '\u00A7b" + args[2]
-										+ "'\u00A7a for map" + args[1]);
+								p.sendMessage("\u00A7aCreator set to '\u00A7b" + args[2] + "'\u00A7a for map" + args[1]);
 							}
 							else
 							{
@@ -593,8 +540,7 @@ public class Parkour extends JavaPlugin implements Listener
 				}
 
 				else if (args[0].equalsIgnoreCase("setspawn")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 2)
 					{
@@ -604,19 +550,13 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								FileConfiguration cfg = getConfig();
 								String mapNumber = args[1].toString();
-								cfg.set("Parkour.map" + mapNumber + ".spawn.posX", p
-										.getLocation().getX());
-								cfg.set("Parkour.map" + mapNumber + ".spawn.posY", p
-										.getLocation().getY());
-								cfg.set("Parkour.map" + mapNumber + ".spawn.posZ", p
-										.getLocation().getZ());
-								cfg.set("Parkour.map" + mapNumber + ".spawn.posPitch", p
-										.getLocation().getPitch());
-								cfg.set("Parkour.map" + mapNumber + ".spawn.posYaw", p
-										.getLocation().getYaw());
+								cfg.set("Parkour.map" + mapNumber + ".spawn.posX", p.getLocation().getX());
+								cfg.set("Parkour.map" + mapNumber + ".spawn.posY", p.getLocation().getY());
+								cfg.set("Parkour.map" + mapNumber + ".spawn.posZ", p.getLocation().getZ());
+								cfg.set("Parkour.map" + mapNumber + ".spawn.posPitch", p.getLocation().getPitch());
+								cfg.set("Parkour.map" + mapNumber + ".spawn.posYaw", p.getLocation().getYaw());
 								saveConfig();
-								p.sendMessage("\u00A7aParkour spawn set to \u00A72map"
-										+ mapNumber + "\u00A7f !");
+								p.sendMessage("\u00A7aParkour spawn set to \u00A72map" + mapNumber + "\u00A7f !");
 							}
 							else
 							{
@@ -635,8 +575,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 				}
 				else if (args[0].equalsIgnoreCase("toggleWaterRespawn")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 2)
 					{
@@ -646,16 +585,14 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								FileConfiguration cfg = getConfig();
 								String mapNumber = args[1].toString();
-								boolean isActive = !cfg.getBoolean("Parkour.map"
-										+ mapNumber + ".waterrespawn");
-								cfg.set("Parkour.map" + mapNumber + ".waterrespawn",
-										isActive);
+								boolean isActive = !cfg.getBoolean("Parkour.map" + mapNumber + ".waterrespawn");
+								cfg.set("Parkour.map" + mapNumber + ".waterrespawn", isActive);
 								saveConfig();
 								if (isActive)
-									p.sendMessage("\u00A7aWaterrespawn is now ON for map \u00A72map"
-											+ mapNumber + "\u00A7f !");
-								else p.sendMessage("\u00A7aWaterrespawn is now OFF for map \u00A72map"
-										+ mapNumber + "\u00A7f !");
+									p.sendMessage("\u00A7aWaterrespawn is now ON for map \u00A72map" + mapNumber
+											+ "\u00A7f !");
+								else p.sendMessage("\u00A7aWaterrespawn is now OFF for map \u00A72map" + mapNumber
+										+ "\u00A7f !");
 							}
 							else
 							{
@@ -674,8 +611,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 				}
 				else if (args[0].equalsIgnoreCase("toggleLavaRespawn")
-						&& (p.hasPermission("parkour.admin") || p
-								.hasPermission("parkour.mapeditor")))
+						&& (p.hasPermission("parkour.admin") || p.hasPermission("parkour.mapeditor")))
 				{
 					if (args.length == 2)
 					{
@@ -685,16 +621,14 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								FileConfiguration cfg = getConfig();
 								String mapNumber = args[1].toString();
-								boolean isActive = !cfg.getBoolean("Parkour.map"
-										+ mapNumber + ".lavarespawn");
-								cfg.set("Parkour.map" + mapNumber + ".lavarespawn",
-										isActive);
+								boolean isActive = !cfg.getBoolean("Parkour.map" + mapNumber + ".lavarespawn");
+								cfg.set("Parkour.map" + mapNumber + ".lavarespawn", isActive);
 								saveConfig();
 								if (isActive)
-									p.sendMessage("\u00A7aLavarespawn is now ON for map \u00A72map"
-											+ mapNumber + "\u00A7f !");
-								else p.sendMessage("\u00A7aLavarespawn is now OFF for map \u00A72map"
-										+ mapNumber + "\u00A7f !");
+									p.sendMessage("\u00A7aLavarespawn is now ON for map \u00A72map" + mapNumber
+											+ "\u00A7f !");
+								else p.sendMessage("\u00A7aLavarespawn is now OFF for map \u00A72map" + mapNumber
+										+ "\u00A7f !");
 							}
 							else
 							{
@@ -712,8 +646,7 @@ public class Parkour extends JavaPlugin implements Listener
 						p.sendMessage("You don't specify the map !");
 					}
 				}
-				else if (args[0].equalsIgnoreCase("setLobby")
-						&& p.hasPermission("parkour.admin"))
+				else if (args[0].equalsIgnoreCase("setLobby") && p.hasPermission("parkour.admin"))
 				{
 					FileConfiguration cfg = getConfig();
 					cfg.set("Lobby.world", p.getWorld().getName());
@@ -727,8 +660,7 @@ public class Parkour extends JavaPlugin implements Listener
 					loadLobby();
 				}
 
-				else if (args[0].equalsIgnoreCase("pReset")
-						&& p.hasPermission("parkour.admin"))
+				else if (args[0].equalsIgnoreCase("pReset") && p.hasPermission("parkour.admin"))
 				{
 					if (args.length == 3)
 					{
@@ -740,8 +672,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 						if (isNumber(args[2]) || DeleteOnAllMaps)
 						{
-							if ((isNumber(args[2]) && maps.contains(toInt(args[2])))
-									|| DeleteOnAllMaps)
+							if ((isNumber(args[2]) && maps.contains(toInt(args[2]))) || DeleteOnAllMaps)
 							{
 								boolean PlayerFound = false;
 								String player = args[1];
@@ -763,8 +694,7 @@ public class Parkour extends JavaPlugin implements Listener
 											it.remove();
 											PlayerFound = true;
 										}
-										else if (Integer.parseInt(KeySplit[0]) == Integer
-												.parseInt(mapNumber))
+										else if (Integer.parseInt(KeySplit[0]) == Integer.parseInt(mapNumber))
 										{
 											PlayerFound = true;
 											it.remove();
@@ -781,13 +711,12 @@ public class Parkour extends JavaPlugin implements Listener
 
 								if (DeleteOnAllMaps)
 								{
-									p.sendMessage("\u00A7aScores reset for player "
-											+ player + " on all maps !");
+									p.sendMessage("\u00A7aScores reset for player " + player + " on all maps !");
 								}
 								else
 								{
-									p.sendMessage("\u00A7aScores reset for player "
-											+ player + " on map " + mapNumber + " !");
+									p.sendMessage("\u00A7aScores reset for player " + player + " on map " + mapNumber
+											+ " !");
 								}
 
 								loadScore();
@@ -822,10 +751,9 @@ public class Parkour extends JavaPlugin implements Listener
 							{
 								mode = "\u00A7aON";
 							}
-							p.sendMessage(mode + " \u00A7f| \u00A7b " + getMapName(i)
-									+ "\u00A77 (\u00A72map" + i + "\u00A77) \u00A77("
-									+ getCfgTotalCheckpoints(i)
-									+ " Checkpoints) \u00A7aby " + getMapCreator(i));
+							p.sendMessage(mode + " \u00A7f| \u00A7b " + getMapName(i) + "\u00A77 (\u00A72map" + i
+									+ "\u00A77) \u00A77(" + getCfgTotalCheckpoints(i) + " Checkpoints) \u00A7aby "
+									+ getMapCreator(i));
 						}
 					}
 				}
@@ -856,8 +784,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 				}
 
-				else if (args[0].equalsIgnoreCase("resetScores")
-						&& p.hasPermission("parkour.admin"))
+				else if (args[0].equalsIgnoreCase("resetScores") && p.hasPermission("parkour.admin"))
 				{
 					if (args.length == 2)
 					{
@@ -866,11 +793,9 @@ public class Parkour extends JavaPlugin implements Listener
 							if (maps.contains(toInt(args[1])))
 							{
 								int mapNumber = Integer.parseInt(args[1]);
-								p.sendMessage("\u00A72Scores reset for map" + mapNumber
-										+ "!");
+								p.sendMessage("\u00A72Scores reset for map" + mapNumber + "!");
 
-								for (Iterator<String> it = Records.keySet().iterator(); it
-										.hasNext();)
+								for (Iterator<String> it = Records.keySet().iterator(); it.hasNext();)
 								{
 									String key = it.next();
 									String[] pName = key.split(":");
@@ -952,8 +877,7 @@ public class Parkour extends JavaPlugin implements Listener
 	@EventHandler
 	public void onSignChange(SignChangeEvent e)
 	{
-		if (e.getLine(0).equalsIgnoreCase("[mwParkour2]")
-				&& !e.getPlayer().hasPermission("parkour.mapeditor"))
+		if (e.getLine(0).equalsIgnoreCase("[mwParkour2]") && !e.getPlayer().hasPermission("parkour.mapeditor"))
 		{
 			e.setCancelled(true);
 		}
@@ -1089,8 +1013,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					if (s.getLine(1).equals("joinLastMap"))
 					{
-						String mapNumber = s.getLine(3).substring(4,
-								s.getLine(3).length() - 1);
+						String mapNumber = s.getLine(3).substring(4, s.getLine(3).length() - 1);
 
 						if (isNumber(mapNumber))
 						{
@@ -1104,20 +1027,14 @@ public class Parkour extends JavaPlugin implements Listener
 									if (cfg.contains("Parkour.map" + mapNumber + ".spawn"))
 									{
 										Location loc = new Location(getServer().getWorld(
-												getConfig().getString(
-														"Parkour.map" + mapNumber
-																+ ".world")),
-												cfg.getDouble("Parkour.map" + mapNumber
-														+ ".spawn.posX"),
-												cfg.getDouble("Parkour.map" + mapNumber
-														+ ".spawn.posY"),
-												cfg.getDouble("Parkour.map" + mapNumber
-														+ ".spawn.posZ"));
+												getConfig().getString("Parkour.map" + mapNumber + ".world")),
+												cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posX"),
+												cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posY"),
+												cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posZ"));
 
-										loc.setPitch((float) cfg.getDouble("Parkour.map"
-												+ mapNumber + ".spawn.posPitch"));
-										loc.setYaw((float) cfg.getDouble("Parkour.map"
-												+ mapNumber + ".spawn.posYaw"));
+										loc.setPitch((float) cfg.getDouble("Parkour.map" + mapNumber
+												+ ".spawn.posPitch"));
+										loc.setYaw((float) cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posYaw"));
 
 										if (!loc.getChunk().isLoaded())
 										{
@@ -1152,8 +1069,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					if (s.getLine(1).equals("lastBestScores"))
 					{
-						String mapNumber = s.getLine(3).substring(4,
-								s.getLine(3).length() - 1);
+						String mapNumber = s.getLine(3).substring(4, s.getLine(3).length() - 1);
 
 						if (isNumber(mapNumber))
 						{
@@ -1184,8 +1100,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					if (s.getLine(1).equals("join"))
 					{
-						String mapNumber = s.getLine(3).substring(4,
-								s.getLine(3).length() - 1);
+						String mapNumber = s.getLine(3).substring(4, s.getLine(3).length() - 1);
 
 						if (isNumber(mapNumber))
 						{
@@ -1202,22 +1117,14 @@ public class Parkour extends JavaPlugin implements Listener
 
 								if (cfg.contains("Parkour.map" + mapNumber + ".spawn"))
 								{
-									Location loc = new Location(getServer()
-											.getWorld(
-													getConfig().getString(
-															"Parkour.map" + mapNumber
-																	+ ".world")),
-											cfg.getDouble("Parkour.map" + mapNumber
-													+ ".spawn.posX"),
-											cfg.getDouble("Parkour.map" + mapNumber
-													+ ".spawn.posY"),
-											cfg.getDouble("Parkour.map" + mapNumber
-													+ ".spawn.posZ"));
+									Location loc = new Location(getServer().getWorld(
+											getConfig().getString("Parkour.map" + mapNumber + ".world")),
+											cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posX"),
+											cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posY"),
+											cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posZ"));
 
-									loc.setPitch((float) cfg.getDouble("Parkour.map"
-											+ mapNumber + ".spawn.posPitch"));
-									loc.setYaw((float) cfg.getDouble("Parkour.map"
-											+ mapNumber + ".spawn.posYaw"));
+									loc.setPitch((float) cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posPitch"));
+									loc.setYaw((float) cfg.getDouble("Parkour.map" + mapNumber + ".spawn.posYaw"));
 
 									if (!loc.getChunk().isLoaded())
 									{
@@ -1233,16 +1140,14 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								e.getPlayer().sendMessage(
-										"\u00A7cThis map no longer exists !");
+								e.getPlayer().sendMessage("\u00A7cThis map no longer exists !");
 							}
 						}
 					}
 
 					if (s.getLine(1).equals("bestScores"))
 					{
-						String mapNumber = s.getLine(3).substring(4,
-								s.getLine(3).length() - 1);
+						String mapNumber = s.getLine(3).substring(4, s.getLine(3).length() - 1);
 
 						if (isNumber(mapNumber))
 						{
@@ -1252,8 +1157,7 @@ public class Parkour extends JavaPlugin implements Listener
 							}
 							else
 							{
-								e.getPlayer().sendMessage(
-										"\u00A7cThis map no longer exists !");
+								e.getPlayer().sendMessage("\u00A7cThis map no longer exists !");
 							}
 						}
 					}
@@ -1263,8 +1167,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 		if (newMap)// map creation
 		{
-			if (e.getPlayer().getName().equals(newMapPlayerEditor)
-					&& e.getAction() == Action.RIGHT_CLICK_BLOCK)
+			if (e.getPlayer().getName().equals(newMapPlayerEditor) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Player p = e.getPlayer();
 
@@ -1283,15 +1186,11 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							FileConfiguration cfg = getConfig();
 
-							p.sendMessage("\u00A78Checkpoint " + CheckpointNumber
-									+ " set on new map " + NewMapNumber);
+							p.sendMessage("\u00A78Checkpoint " + CheckpointNumber + " set on new map " + NewMapNumber);
 
-							cfg.set("Parkour.map" + NewMapNumber + ".cp."
-									+ CheckpointNumber + ".posX", bLoc.getX());
-							cfg.set("Parkour.map" + NewMapNumber + ".cp."
-									+ CheckpointNumber + ".posY", bLoc.getY());
-							cfg.set("Parkour.map" + NewMapNumber + ".cp."
-									+ CheckpointNumber + ".posZ", bLoc.getZ());
+							cfg.set("Parkour.map" + NewMapNumber + ".cp." + CheckpointNumber + ".posX", bLoc.getX());
+							cfg.set("Parkour.map" + NewMapNumber + ".cp." + CheckpointNumber + ".posY", bLoc.getY());
+							cfg.set("Parkour.map" + NewMapNumber + ".cp." + CheckpointNumber + ".posZ", bLoc.getZ());
 
 							saveConfig();
 							newMapCheckpoints.add(bLoc);
@@ -1315,8 +1214,7 @@ public class Parkour extends JavaPlugin implements Listener
 				&& e.getPlayer().getItemInHand().getType() == Material.STICK) // player
 		// use stick to teleport to last last checkpoint
 		{
-			if (Parkour.containsKey(e.getPlayer().getName()))
-				teleportLastCheckpoint(e.getPlayer());
+			if (Parkour.containsKey(e.getPlayer().getName())) teleportLastCheckpoint(e.getPlayer());
 		}
 	}
 
@@ -1361,19 +1259,14 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							int Map = getCpMapNumber(cLoc.get(bLoc).toString());
 
-							getServer().getPluginManager().callEvent(
-									new ParkourStartEvent(p, Map, false));
+							getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, false));
 
 							Parkour.put(
 									p.getName(),
 									(getCpMapNumber(cLoc.get(bLoc).toString()) + "_"
 											+ Long.valueOf(System.currentTimeMillis()) + "_1"));
-							p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b"
-									+ getMapName(Map)
-									+ "'\u00A7a by \u00A72"
-									+ getMapCreator(Map)
-									+ " \u00A77(\u00A7amap"
-									+ Map
+							p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b" + getMapName(Map)
+									+ "'\u00A7a by \u00A72" + getMapCreator(Map) + " \u00A77(\u00A7amap" + Map
 									+ "\u00A77)");
 
 							if (CheckpointEffect)
@@ -1399,8 +1292,7 @@ public class Parkour extends JavaPlugin implements Listener
 					}
 					else
 					{
-						int PlCheckpoint = getPlCheckpoint(Parkour.get(p.getName())
-								.toString());
+						int PlCheckpoint = getPlCheckpoint(Parkour.get(p.getName()).toString());
 						int CpMap = getCpMapNumber(cLoc.get(bLoc).toString());
 						int Map = getPlMapNumber(Parkour.get(p.getName()).toString());
 						int TotalCheckpoints = getCfgTotalCheckpoints(Map);
@@ -1409,19 +1301,14 @@ public class Parkour extends JavaPlugin implements Listener
 						{
 							if (Checkpoint == 1)
 							{
-								getServer().getPluginManager().callEvent(
-										new ParkourStartEvent(p, Map, false));
+								getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, false));
 
-								p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b"
-										+ getMapName(Map)
-										+ "'\u00A7a by \u00A72"
-										+ getMapCreator(Map)
-										+ " \u00A77(\u00A7amap"
-										+ CpMap + "\u00A77)");
+								p.sendMessage("\u00A7aYou have started the parkour on '\u00A7b" + getMapName(Map)
+										+ "'\u00A7a by \u00A72" + getMapCreator(Map) + " \u00A77(\u00A7amap" + CpMap
+										+ "\u00A77)");
 								Parkour.put(
 										p.getName(),
-										(getCpMapNumber(cLoc.get(bLoc).toString())
-												+ "_"
+										(getCpMapNumber(cLoc.get(bLoc).toString()) + "_"
 												+ Long.valueOf(System.currentTimeMillis()) + "_1"));
 
 								if (CheckpointEffect)
@@ -1467,16 +1354,13 @@ public class Parkour extends JavaPlugin implements Listener
 								{
 									p.setFoodLevel(20);
 								}
-								getServer().getPluginManager().callEvent(
-										new ParkourStartEvent(p, Map, true));
+								getServer().getPluginManager().callEvent(new ParkourStartEvent(p, Map, true));
 								p.sendMessage("\u00A7aYou have restarted your time !");
-								setPlTime(p.getName(),
-										Long.valueOf(System.currentTimeMillis()));
+								setPlTime(p.getName(), Long.valueOf(System.currentTimeMillis()));
 								setPlCheckpoint(p.getName(), 1);
 
 							}
-							else if ((Checkpoint == TotalCheckpoints)
-									&& (PlCheckpoint == (Checkpoint - 1)))
+							else if ((Checkpoint == TotalCheckpoints) && (PlCheckpoint == (Checkpoint - 1)))
 							{
 								if (CheckpointEffect)
 								{
@@ -1490,8 +1374,7 @@ public class Parkour extends JavaPlugin implements Listener
 								if (!Records.containsKey(Map + ":" + p.getName()))
 								{
 									getServer().getPluginManager().callEvent(
-											new ParkourFinishEvent(p, Map, totalTime,
-													true));
+											new ParkourFinishEvent(p, Map, totalTime, true));
 									p.sendMessage("\u00A7bYou finished this parkour for the first time in "
 											+ convertTime(totalTime));
 									Records.put(Map + ":" + p.getName(), totalTime);
@@ -1499,15 +1382,10 @@ public class Parkour extends JavaPlugin implements Listener
 
 									if (BroadcastMessage)
 									{
-										getServer()
-												.broadcastMessage(
-														ChatColor
-																.translateAlternateColorCodes(
-																		'&', BroadcastMsg)
-																.replaceAll("PLAYER",
-																		p.getName())
-																.replaceAll("MAPNAME",
-																		getMapName(Map)));
+										getServer().broadcastMessage(
+												ChatColor.translateAlternateColorCodes('&', BroadcastMsg)
+														.replaceAll("PLAYER", p.getName())
+														.replaceAll("MAPNAME", getMapName(Map)));
 									}
 									giveReward(p, Map);
 
@@ -1519,24 +1397,16 @@ public class Parkour extends JavaPlugin implements Listener
 									{
 
 										p.sendMessage("\u00A72You beat your old score !");
-										p.sendMessage("\u00A7aYou finished this parkour in "
-												+ convertTime(totalTime));
+										p.sendMessage("\u00A7aYou finished this parkour in " + convertTime(totalTime));
 										Records.put(Map + ":" + p.getName(), totalTime);
 										saveScore();
 
 										if (BroadcastMessage)
 										{
-											getServer()
-													.broadcastMessage(
-															ChatColor
-																	.translateAlternateColorCodes(
-																			'&',
-																			BroadcastMsg)
-																	.replaceAll("PLAYER",
-																			p.getName())
-																	.replaceAll(
-																			"MAPNAME",
-																			getMapName(Map)));
+											getServer().broadcastMessage(
+													ChatColor.translateAlternateColorCodes('&', BroadcastMsg)
+															.replaceAll("PLAYER", p.getName())
+															.replaceAll("MAPNAME", getMapName(Map)));
 										}
 										giveReward(p, Map);
 
@@ -1544,8 +1414,7 @@ public class Parkour extends JavaPlugin implements Listener
 									else
 									{
 										p.sendMessage("\u00A74You don't beat your old score");
-										p.sendMessage("\u00A7aYou finished this parkour in "
-												+ convertTime(totalTime));
+										p.sendMessage("\u00A7aYou finished this parkour in " + convertTime(totalTime));
 
 										if (!rewardIfBetterScore)
 										{
@@ -1554,8 +1423,7 @@ public class Parkour extends JavaPlugin implements Listener
 									}
 
 									getServer().getPluginManager().callEvent(
-											new ParkourFinishEvent(p, Map, totalTime,
-													false));
+											new ParkourFinishEvent(p, Map, totalTime, false));
 
 								}
 
@@ -1563,15 +1431,13 @@ public class Parkour extends JavaPlugin implements Listener
 
 								if (lobby != null)
 								{
-									getServer().getScheduler().scheduleSyncDelayedTask(
-											this, new Runnable()
-											{
-												public void run()
-												{
-													getServer().getPlayer(pl).teleport(
-															lobby);
-												}
-											}, 5L);
+									getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+									{
+										public void run()
+										{
+											getServer().getPlayer(pl).teleport(lobby);
+										}
+									}, 5L);
 								}
 							}
 							else if (PlCheckpoint == (Checkpoint - 1))
@@ -1583,14 +1449,11 @@ public class Parkour extends JavaPlugin implements Listener
 								}
 
 								setPlCheckpoint(p.getName(), Checkpoint);
-								p.sendMessage("\u00A7bCheckpoint " + (Checkpoint - 1)
-										+ "/" + (TotalCheckpoints - 2) + " reached !");
+								p.sendMessage("\u00A7bCheckpoint " + (Checkpoint - 1) + "/" + (TotalCheckpoints - 2)
+										+ " reached !");
 								getServer().getPluginManager().callEvent(
-										new ParkourCheckpointEvent(p, Map,
-												(Checkpoint - 1), System
-														.currentTimeMillis()
-														- getPlTime(Parkour.get(p
-																.getName()))));
+										new ParkourCheckpointEvent(p, Map, (Checkpoint - 1), System.currentTimeMillis()
+												- getPlTime(Parkour.get(p.getName()))));
 
 							}
 							else if (Checkpoint <= PlCheckpoint)
@@ -1610,14 +1473,12 @@ public class Parkour extends JavaPlugin implements Listener
 			if (Parkour.containsKey(p.getName()))
 			{
 				int Map = getPlMapNumber(Parkour.get(p.getName()).toString());
-				if ((e.getTo().getBlock().getType() == Material.WATER || e.getTo()
-						.getBlock().getType() == Material.STATIONARY_WATER))
+				if ((e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER))
 				{
 					if (getConfig().getBoolean("Parkour.map" + Map + ".waterrespawn"))
 						teleportLastCheckpoint(e.getPlayer());
 				}
-				if ((e.getTo().getBlock().getType() == Material.LAVA || e.getTo()
-						.getBlock().getType() == Material.STATIONARY_LAVA))
+				if ((e.getTo().getBlock().getType() == Material.LAVA || e.getTo().getBlock().getType() == Material.STATIONARY_LAVA))
 				{
 					if (getConfig().getBoolean("Parkour.map" + Map + ".lavarespawn"))
 						teleportLastCheckpoint(e.getPlayer());
@@ -1640,25 +1501,22 @@ public class Parkour extends JavaPlugin implements Listener
 		{
 			if (cfg.contains("Parkour.map" + MapNumber + ".spawn"))
 			{
-				lastCheckpoint = new Location(getServer().getWorld(
-						cfg.getString("Parkour.map" + MapNumber + ".world")),
-						cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posX"),
-						cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posY"),
-						cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posZ"));
+				lastCheckpoint = new Location(
+						getServer().getWorld(cfg.getString("Parkour.map" + MapNumber + ".world")),
+						cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posX"), cfg.getDouble("Parkour.map"
+								+ MapNumber + ".spawn.posY"), cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posZ"));
 
-				lastCheckpoint.setPitch((float) cfg.getDouble("Parkour.map" + MapNumber
-						+ ".spawn.posPitch"));
-				lastCheckpoint.setYaw((float) cfg.getDouble("Parkour.map" + MapNumber
-						+ ".spawn.posYaw"));
+				lastCheckpoint.setPitch((float) cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posPitch"));
+				lastCheckpoint.setYaw((float) cfg.getDouble("Parkour.map" + MapNumber + ".spawn.posYaw"));
 
 				p.teleport(lastCheckpoint);
 			}
 			else
 			{
-				lastCheckpoint = new Location(getServer().getWorld(
-						cfg.getString("Parkour.map" + MapNumber + ".world")),
-						cfg.getDouble("Parkour.map" + MapNumber + ".cp.1.posX") + 0.5,
-						cfg.getDouble("Parkour.map" + MapNumber + ".cp.1.posY"),
+				lastCheckpoint = new Location(
+						getServer().getWorld(cfg.getString("Parkour.map" + MapNumber + ".world")),
+						cfg.getDouble("Parkour.map" + MapNumber + ".cp.1.posX") + 0.5, cfg.getDouble("Parkour.map"
+								+ MapNumber + ".cp.1.posY"),
 						cfg.getDouble("Parkour.map" + MapNumber + ".cp.1.posZ") + 0.5);
 
 				lastCheckpoint.setPitch(p.getLocation().getPitch());
@@ -1668,13 +1526,10 @@ public class Parkour extends JavaPlugin implements Listener
 		}
 		else
 		{
-			lastCheckpoint = new Location(getServer().getWorld(
-					cfg.getString("Parkour.map" + MapNumber + ".world")),
-					cfg.getDouble("Parkour.map" + MapNumber + ".cp." + PlCheckpoint
-							+ ".posX") + 0.5, cfg.getDouble("Parkour.map" + MapNumber
-							+ ".cp." + PlCheckpoint + ".posY"),
-					cfg.getDouble("Parkour.map" + MapNumber + ".cp." + PlCheckpoint
-							+ ".posZ") + 0.5);
+			lastCheckpoint = new Location(getServer().getWorld(cfg.getString("Parkour.map" + MapNumber + ".world")),
+					cfg.getDouble("Parkour.map" + MapNumber + ".cp." + PlCheckpoint + ".posX") + 0.5,
+					cfg.getDouble("Parkour.map" + MapNumber + ".cp." + PlCheckpoint + ".posY"),
+					cfg.getDouble("Parkour.map" + MapNumber + ".cp." + PlCheckpoint + ".posZ") + 0.5);
 
 			lastCheckpoint.setPitch(p.getLocation().getPitch());
 			lastCheckpoint.setYaw(p.getLocation().getYaw());
@@ -1771,11 +1626,10 @@ public class Parkour extends JavaPlugin implements Listener
 		{
 			for (int i = cfg.getInt("Parkour.map" + mapNumber + ".nombreCp"); i >= 1; i--)
 			{
-				Location loc = new Location(getServer().getWorld(
-						cfg.getString("Parkour.map" + mapNumber + ".world")),
-						cfg.getInt("Parkour.map" + mapNumber + ".cp." + i + ".posX"),
-						cfg.getInt("Parkour.map" + mapNumber + ".cp." + i + ".posY"),
-						cfg.getInt("Parkour.map" + mapNumber + ".cp." + i + ".posZ"));
+				Location loc = new Location(getServer().getWorld(cfg.getString("Parkour.map" + mapNumber + ".world")),
+						cfg.getInt("Parkour.map" + mapNumber + ".cp." + i + ".posX"), cfg.getInt("Parkour.map"
+								+ mapNumber + ".cp." + i + ".posY"), cfg.getInt("Parkour.map" + mapNumber + ".cp." + i
+								+ ".posZ"));
 				String HashTable = mapNumber + "_" + i;
 				cLoc.put(loc, HashTable);
 			}
@@ -1785,8 +1639,8 @@ public class Parkour extends JavaPlugin implements Listener
 	private void intMaps()
 	{
 		maps.clear();
-		String mapList = getConfig().getConfigurationSection("Parkour").getKeys(false)
-				.toString().replaceAll("\\s", "").replace("[", "").replace("]", "");
+		String mapList = getConfig().getConfigurationSection("Parkour").getKeys(false).toString().replaceAll("\\s", "")
+				.replace("[", "").replace("]", "");
 		String[] mapsSplit = mapList.split(",");
 		for (int i = getConfig().getInt("Parkour.mapsNombre"); i >= 0; i--)
 		{
@@ -1805,8 +1659,7 @@ public class Parkour extends JavaPlugin implements Listener
 		{
 			if (getConfig().contains("Parkour.map" + mapNumber + ".toggle"))
 			{
-				toggleParkour.put(mapNumber,
-						getConfig().getBoolean("Parkour.map" + mapNumber + ".toggle"));
+				toggleParkour.put(mapNumber, getConfig().getBoolean("Parkour.map" + mapNumber + ".toggle"));
 			}
 		}
 	}
@@ -1827,14 +1680,12 @@ public class Parkour extends JavaPlugin implements Listener
 		// Rewards
 		cfg.addDefault("rewards.enable", false);
 		cfg.addDefault("rewards.cooldown", 300);
-		cfg.addDefault("rewards.cooldownMessage",
-				"You will receive your next reward on this map in TIME");
+		cfg.addDefault("rewards.cooldownMessage", "You will receive your next reward on this map in TIME");
 		cfg.addDefault("rewards.rewardIfBetterScore", true);
 
 		cfg.addDefault("rewards.money.enable", false);
 		cfg.addDefault("rewards.money.amount", 10);
-		cfg.addDefault("rewards.money.message",
-				"&bYou have received MONEYAMOUNT Dollars !");
+		cfg.addDefault("rewards.money.message", "&bYou have received MONEYAMOUNT Dollars !");
 		cfg.addDefault("rewards.command.enable", false);
 		cfg.addDefault("rewards.command.cmd", "give PLAYER 5 10");
 		cfg.addDefault("rewards.command.message", "&bYou have received 5 wood !");
@@ -1847,8 +1698,7 @@ public class Parkour extends JavaPlugin implements Listener
 		cfg.options().copyDefaults(true);
 		saveConfig();
 
-		removePotionsEffectsOnParkour = cfg
-				.getBoolean("options.removePotionsEffectsOnParkour");
+		removePotionsEffectsOnParkour = cfg.getBoolean("options.removePotionsEffectsOnParkour");
 		InvincibleWhileParkour = cfg.getBoolean("options.InvincibleWhileParkour");
 		CheckpointEffect = cfg.getBoolean("options.CheckpointEffect");
 		BroadcastMessage = cfg.getBoolean("options.BroadcastOnRecord.enable");
@@ -1872,9 +1722,8 @@ public class Parkour extends JavaPlugin implements Listener
 		if (cfg.contains("Lobby"))
 		{
 			lobby = null;
-			Location loc = new Location(getServer()
-					.getWorld(cfg.getString("Lobby.world")), cfg.getDouble("Lobby.posX"),
-					cfg.getDouble("Lobby.posY"), cfg.getDouble("Lobby.posZ"));
+			Location loc = new Location(getServer().getWorld(cfg.getString("Lobby.world")),
+					cfg.getDouble("Lobby.posX"), cfg.getDouble("Lobby.posY"), cfg.getDouble("Lobby.posZ"));
 			loc.setPitch((float) cfg.getDouble("Lobby.posPitch"));
 			loc.setYaw((float) cfg.getDouble("Lobby.posYaw"));
 			lobby = loc;
@@ -1890,8 +1739,7 @@ public class Parkour extends JavaPlugin implements Listener
 	{
 		try
 		{
-			ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(
-					new FileOutputStream((path))));
+			ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream((path))));
 			oos.writeObject((Object) Records);
 			oos.flush();
 			oos.close();
@@ -1906,8 +1754,7 @@ public class Parkour extends JavaPlugin implements Listener
 	{
 		try
 		{
-			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(
-					new FileInputStream(path)));
+			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(path)));
 			Records.clear();
 			@SuppressWarnings("unchecked")
 			HashMap<String, Long> scoreMap = (HashMap<String, Long>) ois.readObject();
@@ -1955,8 +1802,8 @@ public class Parkour extends JavaPlugin implements Listener
 					rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 					if (vault) economy.depositPlayer(p.getName(), rewardMoney);
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							rewardMoneyMsg).replaceAll("MONEYAMOUNT", "" + rewardMoney));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardMoneyMsg).replaceAll("MONEYAMOUNT",
+							"" + rewardMoney));
 				}
 				if (rewardCommandEnable)
 				{
@@ -1964,8 +1811,7 @@ public class Parkour extends JavaPlugin implements Listener
 
 					getServer().dispatchCommand(getServer().getConsoleSender(),
 							rewardCmd.replaceAll("PLAYER", p.getName()));
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							rewardCommandMsg));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardCommandMsg));
 				}
 			}
 			else
@@ -1974,29 +1820,24 @@ public class Parkour extends JavaPlugin implements Listener
 				{
 					if (rewardMoneyEnable && rewardMoney > 0)
 					{
-						rewardPlayersCooldown
-								.put(p.getName(), System.currentTimeMillis());
+						rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 						if (vault) economy.depositPlayer(p.getName(), rewardMoney);
-						p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-								rewardMoneyMsg).replaceAll("MONEYAMOUNT",
-								"" + rewardMoney));
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardMoneyMsg).replaceAll(
+								"MONEYAMOUNT", "" + rewardMoney));
 					}
 					if (rewardCommandEnable)
 					{
-						rewardPlayersCooldown
-								.put(p.getName(), System.currentTimeMillis());
+						rewardPlayersCooldown.put(p.getName(), System.currentTimeMillis());
 
 						getServer().dispatchCommand(getServer().getConsoleSender(),
 								rewardCmd.replaceAll("PLAYER", p.getName()));
-						p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-								rewardCommandMsg));
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', rewardCommandMsg));
 					}
 				}
 				else
 				{
-					long time = (System.currentTimeMillis() - rewardPlayersCooldown.get(p
-							.getName()));
+					long time = (System.currentTimeMillis() - rewardPlayersCooldown.get(p.getName()));
 
 					int ms1 = (int) time;
 					int secs = ms1 / 1000;
@@ -2025,8 +1866,7 @@ public class Parkour extends JavaPlugin implements Listener
 						hoursS = "0" + hoursS;
 					}
 
-					p.sendMessage(rewardCooldownMsg.replaceAll("TIME", hoursS + "h:"
-							+ minsS + "m:" + secsS + "s"));
+					p.sendMessage(rewardCooldownMsg.replaceAll("TIME", hoursS + "h:" + minsS + "m:" + secsS + "s"));
 				}
 			}
 		}
@@ -2122,11 +1962,8 @@ public class Parkour extends JavaPlugin implements Listener
 	{
 		Map<String, Long> records = getRecords(map);
 
-		player.sendMessage("\u00A78---=\u00A72Best\u00A78=\u00A72times\u00A78=\u00A77( \u00A7b"
-				+ getMapName(map)
-				+ "\u00A77 by\u00A72 "
-				+ getMapCreator(map)
-				+ " \u00A77(\u00A7aMap" + map + "\u00A77) )\u00A78=---");
+		player.sendMessage("\u00A78---=\u00A72Best\u00A78=\u00A72times\u00A78=\u00A77( \u00A7b" + getMapName(map)
+				+ "\u00A77 by\u00A72 " + getMapCreator(map) + " \u00A77(\u00A7aMap" + map + "\u00A77) )\u00A78=---");
 
 		boolean inTopTen = false;
 		int counter = 1;
