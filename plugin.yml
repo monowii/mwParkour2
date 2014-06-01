@@ -1,0 +1,8 @@
+name: mwParkour2
+author: monowii
+version: 2
+main: fr.monowii.parkour2.Parkour2
+description: Simple and efficient parkour plugin !
+commands:
+  parkour:
+    aliases: [pk]
