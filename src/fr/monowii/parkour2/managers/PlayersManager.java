@@ -1,8 +1,7 @@
 package fr.monowii.parkour2.managers;
 
 import fr.monowii.parkour2.Parkour2;
-import fr.monowii.parkour2.PlayerParkourInfo;
-import fr.monowii.parkour2.level.Level;
+import fr.monowii.parkour2.parkour.Parkour;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,14 +13,14 @@ public class PlayersManager {
     private HashMap<String, PlayerParkourInfo> players = new HashMap<String, PlayerParkourInfo>(); //playerName / PlayerParkourInfo
 
     //Players
-    public void addPlayer(Player p, int levelId) {
-        if (!Parkour2.getLevelsManager().containsLevel(levelId))
+    public void addPlayer(Player p, int parkourId) {
+        if (!Parkour2.getParkoursManager().containsParkour(parkourId))
             return;
 
         if (players.containsKey(p.getName()))
             players.remove(p.getName());
 
-        players.put(p.getName(), new PlayerParkourInfo(levelId));
+        players.put(p.getName(), new PlayerParkourInfo(parkourId));
     }
 
     public void removePlayer(Player p) {
@@ -40,15 +39,15 @@ public class PlayersManager {
         return players.containsKey(p.getName());
     }
 
-    public void teleportToLastCheckpoint(Player player, Level level) {
+    public void teleportToLastCheckpoint(Player player, Parkour parkour) {
         PlayerParkourInfo ppi = players.get(player.getName());
 
         player.setFireTicks(0);
 
-        if (ppi.getLastCheckpoint() == 0 || !level.getOptions().isRespawnAtCheckpoint()) {
-            player.teleport(level.getSpawn());
+        if (ppi.getLastCheckpoint() == 0 || !parkour.getOptions().isRespawnAtCheckpoint()) {
+            player.teleport(parkour.getSpawn());
         } else {
-            Location loc = level.getCheckpoints().get(ppi.getLastCheckpoint()).clone();
+            Location loc = parkour.getCheckpoints().get(ppi.getLastCheckpoint()).clone();
             loc.setX(loc.getBlockX() + 0.5);
 
             if (loc.clone().add(0, -1, 0).getBlock().getType() == Material.FENCE || loc.clone().add(0, -1, 0).getBlock().getType() == Material.NETHER_FENCE)

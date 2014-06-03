@@ -1,4 +1,4 @@
-package fr.monowii.parkour2.level;
+package fr.monowii.parkour2.parkour;
 
 import fr.monowii.parkour2.Parkour2;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,10 +11,10 @@ public class ParkourOptions
     private boolean lavaRespawn;
     private boolean voidRespawn;
     private boolean respawnAtCheckpoint;
-    private int levelId;
+    private int parkourId;
 
-    public ParkourOptions(int levelId) {
-        this.levelId = levelId;
+    public ParkourOptions(int parkourId) {
+        this.parkourId = parkourId;
         this.waterRespawn = true;
         this.lavaRespawn = true;
         this.voidRespawn = true;
@@ -26,10 +26,10 @@ public class ParkourOptions
     }
 
     public void setWaterRespawn(boolean waterRespawn) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+levelId+".options.waterRespawn", waterRespawn);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+parkourId+".options.waterRespawn", waterRespawn);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,10 +42,10 @@ public class ParkourOptions
     }
 
     public void setLavaRespawn(boolean lavaRespawn) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+levelId+".options.lavaRespawn", lavaRespawn);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+parkourId+".options.lavaRespawn", lavaRespawn);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,10 +58,10 @@ public class ParkourOptions
     }
 
     public void setVoidRespawn(boolean voidRespawn) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+levelId+".options.voidRespawn", voidRespawn);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+parkourId+".options.voidRespawn", voidRespawn);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,10 +77,10 @@ public class ParkourOptions
     }
 
     public void setRespawnAtCheckpoint(boolean respawnAtCheckpoint) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+levelId+".options.respawnAtCheckpoint", respawnAtCheckpoint);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+parkourId+".options.respawnAtCheckpoint", respawnAtCheckpoint);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

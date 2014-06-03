@@ -1,13 +1,13 @@
-package fr.monowii.parkour2;
+package fr.monowii.parkour2.managers;
 
 public class PlayerParkourInfo
 {
     private long startTime;
-    private int levelId;
+    private int parkourId;
     private int lastCheckpoint;
 
-    public PlayerParkourInfo(int levelId) {
-        this.levelId = levelId;
+    public PlayerParkourInfo(int parkourId) {
+        this.parkourId = parkourId;
         this.startTime = System.currentTimeMillis();
         lastCheckpoint = 0;
     }
@@ -28,7 +28,7 @@ public class PlayerParkourInfo
         this.lastCheckpoint = lastCheckpoint;
     }
 
-    public int getLevelId() {
-        return levelId;
+    public int getParkourId() {
+        return parkourId;
     }
 }

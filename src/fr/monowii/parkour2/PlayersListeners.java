@@ -1,8 +1,8 @@
 package fr.monowii.parkour2;
 
 import fr.monowii.parkour2.events.*;
-import fr.monowii.parkour2.level.CheckpointInfo;
-import fr.monowii.parkour2.level.Level;
+import fr.monowii.parkour2.parkour.CheckpointInfo;
+import fr.monowii.parkour2.parkour.Parkour;
 import fr.monowii.parkour2.managers.MessagesManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -44,17 +44,17 @@ public class PlayersListeners implements Listener
 
                 if (Parkour2.getPlayersManager().containsPlayer(p))
                 {
-                    Level level = Parkour2.getLevelsManager().getLevel(Parkour2.getPlayersManager().getPlayer(p).getLevelId());
+                    Parkour parkour = Parkour2.getParkoursManager().getParkour(Parkour2.getPlayersManager().getPlayer(p).getParkourId());
 
-                    if (level.getOptions().isVoidRespawn())
+                    if (parkour.getOptions().isVoidRespawn())
                     {
-                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(p, level, ParkourDeathCause.VOID);
+                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(p, parkour, ParkourDeathCause.VOID);
                         Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppde);
                         if (ppde.isCancelled())
                             return;
 
                         e.setDamage(0);
-                        Parkour2.getPlayersManager().teleportToLastCheckpoint(p, level);
+                        Parkour2.getPlayersManager().teleportToLastCheckpoint(p, parkour);
                     }
                 }
             }
@@ -72,16 +72,16 @@ public class PlayersListeners implements Listener
             {
                 if (Parkour2.getPlayersManager().containsPlayer(e.getPlayer()))
                 {
-                    Level level = Parkour2.getLevelsManager().getLevel(Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getLevelId());
+                    Parkour parkour = Parkour2.getParkoursManager().getParkour(Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getParkourId());
 
-                    if (level.getOptions().isWaterRespawn())
+                    if (parkour.getOptions().isWaterRespawn())
                     {
-                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(e.getPlayer(), level, ParkourDeathCause.WATER);
+                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(e.getPlayer(), parkour, ParkourDeathCause.WATER);
                         Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppde);
                         if (ppde.isCancelled())
                             return;
 
-                        Parkour2.getPlayersManager().teleportToLastCheckpoint(e.getPlayer(), level);
+                        Parkour2.getPlayersManager().teleportToLastCheckpoint(e.getPlayer(), parkour);
                     }
                 }
             }
@@ -89,42 +89,42 @@ public class PlayersListeners implements Listener
             {
                 if (Parkour2.getPlayersManager().containsPlayer(e.getPlayer()))
                 {
-                    Level level = Parkour2.getLevelsManager().getLevel(Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getLevelId());
+                    Parkour parkour = Parkour2.getParkoursManager().getParkour(Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getParkourId());
 
-                    if (level.getOptions().isLavaRespawn())
+                    if (parkour.getOptions().isLavaRespawn())
                     {
-                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(e.getPlayer(), level, ParkourDeathCause.LAVA);
+                        PlayerParkourDeathEvent ppde = new PlayerParkourDeathEvent(e.getPlayer(), parkour, ParkourDeathCause.LAVA);
                         Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppde);
                         if (ppde.isCancelled())
                             return;
 
-                        Parkour2.getPlayersManager().teleportToLastCheckpoint(e.getPlayer(), level);
+                        Parkour2.getPlayersManager().teleportToLastCheckpoint(e.getPlayer(), parkour);
                     }
                 }
             }
 
             if (e.getTo().getBlock().getType() == Material.STONE_PLATE)
             {
-                if (Parkour2.getLevelsManager().isCheckpoint(to))
+                if (Parkour2.getParkoursManager().isCheckpoint(to))
                 {
                     Player p = e.getPlayer();
-                    CheckpointInfo checkpointInfo = Parkour2.getLevelsManager().getCheckpoint(to);
-                    Level level = Parkour2.getLevelsManager().getLevel(checkpointInfo.getLevelId());
+                    CheckpointInfo checkpointInfo = Parkour2.getParkoursManager().getCheckpoint(to);
+                    Parkour parkour = Parkour2.getParkoursManager().getParkour(checkpointInfo.getParkourId());
 
-                    if (!level.isActive()) {
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorLevelNotActive);
+                    if (!parkour.isActive()) {
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorParkourNotActive);
                         return;
                     }
 
                     if (checkpointInfo.getCheckpointType() == CheckpointInfo.CheckpointType.START)
                     {
-                        if (preparePlayer(p, level))
+                        if (preparePlayer(p, parkour))
                             return;
 
-                        //If the player restart the level
-                        if (Parkour2.getPlayersManager().containsPlayer(p) && level.getId() == Parkour2.getPlayersManager().getPlayer(p).getLevelId())
+                        //If the player restart the parkour
+                        if (Parkour2.getPlayersManager().containsPlayer(p) && parkour.getId() == Parkour2.getPlayersManager().getPlayer(p).getParkourId())
                         {
-                            PlayerParkourRestartEvent ppre = new PlayerParkourRestartEvent(p, level);
+                            PlayerParkourRestartEvent ppre = new PlayerParkourRestartEvent(p, parkour);
                             Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppre);
                             if (ppre.isCancelled())
                                 return;
@@ -132,14 +132,14 @@ public class PlayersListeners implements Listener
                             Parkour2.getPlayersManager().getPlayer(p).resetStartTime();
 
                             if (mParkourRestart)
-                                p.sendMessage(MessagesManager.prefix+MessagesManager.playerRestartLevel.replace("%levelName", level.getName()).replace("%authors", level.getAuthors()));
+                                p.sendMessage(MessagesManager.prefix+MessagesManager.playerRestartParkour.replace("%parkourName", parkour.getName()).replace("%authors", parkour.getAuthors()));
 
                             Parkour2.getPlayersManager().getPlayer(p).setLastCheckpoint(0);
                         }
-                        //If the player start another level
+                        //If the player start another parkour
                         else
                         {
-                            PlayerParkourStartEvent ppse = new PlayerParkourStartEvent(p, level);
+                            PlayerParkourStartEvent ppse = new PlayerParkourStartEvent(p, parkour);
                             Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppse);
                             if (ppse.isCancelled())
                                 return;
@@ -147,10 +147,10 @@ public class PlayersListeners implements Listener
                             if (Parkour2.getPlayersManager().containsPlayer(p))
                                 Parkour2.getPlayersManager().removePlayer(p);
 
-                            Parkour2.getPlayersManager().addPlayer(p, level.getId());
+                            Parkour2.getPlayersManager().addPlayer(p, parkour.getId());
 
                             if (mParkourStart)
-                                p.sendMessage(MessagesManager.prefix+MessagesManager.playerStartLevel.replace("%levelName", level.getName()).replace("%authors", level.getAuthors()));
+                                p.sendMessage(MessagesManager.prefix+MessagesManager.playerStartParkour.replace("%parkourName", parkour.getName()).replace("%authors", parkour.getAuthors()));
                         }
                     }
                     else if (checkpointInfo.getCheckpointType() == CheckpointInfo.CheckpointType.CHECKPOINT)
@@ -158,10 +158,10 @@ public class PlayersListeners implements Listener
                         if (!Parkour2.getPlayersManager().containsPlayer(p))
                             return;
 
-                        if (preparePlayer(p, level))
+                        if (preparePlayer(p, parkour))
                             return;
 
-                        if (level.getId() != Parkour2.getPlayersManager().getPlayer(p).getLevelId()) {
+                        if (parkour.getId() != Parkour2.getPlayersManager().getPlayer(p).getParkourId()) {
                             p.sendMessage(MessagesManager.prefix+MessagesManager.PlayerBadParkour);
                             return;
                         }
@@ -176,7 +176,7 @@ public class PlayersListeners implements Listener
                             return;
                         }
 
-                        PlayerParkourCheckpointEvent ppce = new PlayerParkourCheckpointEvent(p, level, checkpointInfo);
+                        PlayerParkourCheckpointEvent ppce = new PlayerParkourCheckpointEvent(p, parkour, checkpointInfo);
                         Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppce);
                         if (ppce.isCancelled())
                             return;
@@ -184,7 +184,7 @@ public class PlayersListeners implements Listener
                         Parkour2.getPlayersManager().getPlayer(p).setLastCheckpoint(checkpointInfo.getCheckpoint());
 
                         if (mParkourCheckpoint)
-                            p.sendMessage(MessagesManager.prefix+MessagesManager.playerCheckpointLevel.replace("%checkpoint", ""+checkpointInfo.getCheckpoint()).replace("%totalCheckpoints", ""+(level.getCheckpoints().size()-2)));
+                            p.sendMessage(MessagesManager.prefix+MessagesManager.playerCheckpointParkour.replace("%checkpoint", ""+checkpointInfo.getCheckpoint()).replace("%totalCheckpoints", ""+(parkour.getCheckpoints().size()-2)));
 
 
                     }
@@ -193,10 +193,10 @@ public class PlayersListeners implements Listener
                         if (!Parkour2.getPlayersManager().containsPlayer(p))
                             return;
 
-                        if (preparePlayer(p, level))
+                        if (preparePlayer(p, parkour))
                             return;
 
-                        if (level.getId() != Parkour2.getPlayersManager().getPlayer(p).getLevelId()) {
+                        if (parkour.getId() != Parkour2.getPlayersManager().getPlayer(p).getParkourId()) {
                             p.sendMessage(MessagesManager.prefix+MessagesManager.PlayerBadParkour);
                             return;
                         }
@@ -207,20 +207,20 @@ public class PlayersListeners implements Listener
                         }
 
                         long time = System.currentTimeMillis() - Parkour2.getPlayersManager().getPlayer(p).getStartTime();
-                        long oldTime = Parkour2.getTimesManager().getPlayerTime(level.getId(), p);
+                        long oldTime = Parkour2.getTimesManager().getPlayerTime(parkour.getId(), p);
 
-                        PlayerParkourFinishEvent ppfe = new PlayerParkourFinishEvent(p, level, time);
+                        PlayerParkourFinishEvent ppfe = new PlayerParkourFinishEvent(p, parkour, time);
                         Parkour2.getPlugin().getServer().getPluginManager().callEvent(ppfe);
                         if (ppfe.isCancelled())
                             return;
 
-                        if (!Parkour2.getTimesManager().hasScore(level.getId(), p) || time < oldTime) {
+                        if (!Parkour2.getTimesManager().hasScore(parkour.getId(), p) || time < oldTime) {
                             p.sendMessage(MessagesManager.prefix+MessagesManager.playerBestScore);
-                            Parkour2.getTimesManager().addPlayerTime(level.getId(), p, time);
+                            Parkour2.getTimesManager().addPlayerTime(parkour.getId(), p, time);
                         }
 
                         if (mParkourFinish)
-                            p.sendMessage(MessagesManager.prefix + MessagesManager.playerEndLevel.replace("%levelName", level.getName()).replace("%time", Utils.convertTime(time)));
+                            p.sendMessage(MessagesManager.prefix + MessagesManager.playerEndParkour.replace("%parkourName", parkour.getName()).replace("%time", Utils.convertTime(time)));
 
                         Parkour2.getPlayersManager().removePlayer(p);
 
@@ -231,10 +231,10 @@ public class PlayersListeners implements Listener
         }
     }
 
-    public boolean preparePlayer(Player p, Level level) {
+    public boolean preparePlayer(Player p, Parkour parkour) {
         if (p.getGameMode() == GameMode.CREATIVE) {
             p.setGameMode(GameMode.SURVIVAL);
-            p.teleport(level.getSpawn());
+            p.teleport(parkour.getSpawn());
             p.getInventory().clear();
             p.getEquipment().clear();
             p.getActivePotionEffects().clear();
@@ -251,36 +251,37 @@ public class PlayersListeners implements Listener
             {
                 String line = e.getLine(1);
 
-                if (line.equalsIgnoreCase("info") && Utils.isNumeric(e.getLine(2))) {
-                    int levelId = Integer.valueOf(e.getLine(2));
+                if (line.equalsIgnoreCase("info") && Utils.isNumeric(e.getLine(2)))
+                {
+                    int parkourId = Integer.valueOf(e.getLine(2));
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId)) {
-                        Level level = Parkour2.getLevelsManager().getLevel(levelId);
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId)) {
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(parkourId);
                         e.setLine(0, "§e[mwParkour2]");
-                        e.setLine(1, level.getName());
-                        e.setLine(2, "(level"+levelId+") by");
-                        e.setLine(3, level.getAuthors());
+                        e.setLine(1, parkour.getName());
+                        e.setLine(2, "(parkour"+parkourId+") by");
+                        e.setLine(3, parkour.getAuthors());
                     }
 
                 }
                 else if (line.equalsIgnoreCase("join") && Utils.isNumeric(e.getLine(2))) {
-                    int levelId = Integer.valueOf(e.getLine(2));
+                    int parkourId = Integer.valueOf(e.getLine(2));
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId)) {
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId)) {
                         e.setLine(0, "§e[mwParkour2]");
                         e.setLine(1, "§fJoin");
-                        e.setLine(2, Parkour2.getLevelsManager().getLevel(levelId).getName());
-                        e.setLine(3, "(level " + levelId + ")");
+                        e.setLine(2, Parkour2.getParkoursManager().getParkour(parkourId).getName());
+                        e.setLine(3, "(parkour " + parkourId + ")");
                     }
                 }
                 else if (line.equalsIgnoreCase("best") && Utils.isNumeric(e.getLine(2))) {
-                    int levelId = Integer.valueOf(e.getLine(2));
+                    int parkourId = Integer.valueOf(e.getLine(2));
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId)) {
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId)) {
                         e.setLine(0, "§e[mwParkour2]");
                         e.setLine(1, "§aBest");
-                        e.setLine(2, Parkour2.getLevelsManager().getLevel(levelId).getName());
-                        e.setLine(3, "(level " + levelId + ")");
+                        e.setLine(2, Parkour2.getParkoursManager().getParkour(parkourId).getName());
+                        e.setLine(3, "(parkour " + parkourId + ")");
                     }
                 }
             }
@@ -302,32 +303,32 @@ public class PlayersListeners implements Listener
                 {
                     if (s.getLine(1).equals("§fJoin"))
                     {
-                        String levelId = s.getLine(3).split(" ")[1];
-                        levelId = levelId.substring(0, levelId.length()-1);
+                        String parkourId = s.getLine(3).split(" ")[1];
+                        parkourId = parkourId.substring(0, parkourId.length()-1);
 
-                        if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(levelId)))
+                        if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(parkourId)))
                         {
-                            Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(levelId));
+                            Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(parkourId));
 
-                            e.getPlayer().teleport(level.getSpawn());
+                            e.getPlayer().teleport(parkour.getSpawn());
 
                             if (mParkourJoin)
-                                e.getPlayer().sendMessage(MessagesManager.prefix + MessagesManager.playerJoinLevel.replace("%levelName", level.getName()).replace("%levelId", ""+level.getId()));
+                                e.getPlayer().sendMessage(MessagesManager.prefix + MessagesManager.playerJoinParkour.replace("%parkourName", parkour.getName()).replace("%parkourId", ""+ parkour.getId()));
                         }
                     }
                     else if (s.getLine(1).equals("§aBest"))
                     {
                         Player p = e.getPlayer();
-                        String levelId = s.getLine(3).split(" ")[1];
-                        levelId = levelId.substring(0, levelId.length()-1);
+                        String parkourId = s.getLine(3).split(" ")[1];
+                        parkourId = parkourId.substring(0, parkourId.length()-1);
 
-                        if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(levelId)))
+                        if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(parkourId)))
                         {
-                            Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(levelId));
+                            Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(parkourId));
 
-                            p.sendMessage("-----=[ Best times in "+ level.getName()+" by "+ level.getAuthors()+" ]=-----");
+                            p.sendMessage("-----=[ Best times in "+ parkour.getName()+" by "+ parkour.getAuthors()+" ]=-----");
                             int rank = 0;
-                            for (Map.Entry<String, Long> entry : Parkour2.getTimesManager().getTimes(level.getId(), 0).entrySet()) {
+                            for (Map.Entry<String, Long> entry : Parkour2.getTimesManager().getTimes(parkour.getId(), 0).entrySet()) {
                                 rank++;
                                 p.sendMessage(rank + " §b| " + entry.getKey() + " - " + Utils.convertTime(entry.getValue()));
                             }
@@ -341,8 +342,9 @@ public class PlayersListeners implements Listener
         {
             if (Parkour2.getPlayersManager().containsPlayer(e.getPlayer()) && e.getPlayer().getItemInHand().getType() == Material.STICK)
             {
-                int levelId = Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getLevelId();
-                e.getPlayer().teleport(Parkour2.getLevelsManager().getLevel(levelId).getSpawn());
+                int parkourId = Parkour2.getPlayersManager().getPlayer(e.getPlayer()).getParkourId();
+
+                e.getPlayer().teleport(Parkour2.getParkoursManager().getParkour(parkourId).getSpawn());
                 e.setCancelled(true);
             }
         }

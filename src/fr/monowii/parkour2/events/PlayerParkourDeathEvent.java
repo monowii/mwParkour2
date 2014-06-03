@@ -1,6 +1,6 @@
 package fr.monowii.parkour2.events;
 
-import fr.monowii.parkour2.level.Level;
+import fr.monowii.parkour2.parkour.Parkour;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -10,13 +10,13 @@ public class PlayerParkourDeathEvent extends Event implements Cancellable
 {
     private static final HandlerList handlers = new HandlerList();
     private Player player;
-    private Level level;
+    private Parkour parkour;
     private ParkourDeathCause cause;
     private boolean cancelled;
 
-    public PlayerParkourDeathEvent(Player player, Level level, ParkourDeathCause cause) {
+    public PlayerParkourDeathEvent(Player player, Parkour parkour, ParkourDeathCause cause) {
         this.player = player;
-        this.level = level;
+        this.parkour = parkour;
         this.cause = cause;
     }
 
@@ -24,8 +24,8 @@ public class PlayerParkourDeathEvent extends Event implements Cancellable
         return player;
     }
 
-    public Level getLevel() {
-        return level;
+    public Parkour getParkour() {
+        return parkour;
     }
 
     public ParkourDeathCause getCause() {

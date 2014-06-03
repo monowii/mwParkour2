@@ -1,4 +1,4 @@
-package fr.monowii.parkour2.level;
+package fr.monowii.parkour2.parkour;
 
 import fr.monowii.parkour2.Parkour2;
 import org.bukkit.Location;
@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Level
+public class Parkour
 {
     private int id;
     private String name;
@@ -19,7 +19,7 @@ public class Level
     private Location spawn;
     private ArrayList<Location> checkpoints = new ArrayList<Location>();
 
-    public Level(int id) {
+    public Parkour(int id) {
         this.id = id;
         this.active = false;
         this.name = "Unknown";
@@ -32,10 +32,10 @@ public class Level
     }
 
     public void setName(String name) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+id+".name", name);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+id+".name", name);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,10 +48,10 @@ public class Level
     }
 
     public void setAuthors(String authors) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels." + id + ".authors", authors);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours." + id + ".authors", authors);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +68,10 @@ public class Level
     }
 
     public void setActive(boolean active) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+id+".active", active);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+id+".active", active);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,10 +103,10 @@ public class Level
             return false;
         checkpoints.remove(lastCheckpoint);
 
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+id+".checkpoints."+lastCheckpoint, null);
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+id+".checkpoints."+lastCheckpoint, null);
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,13 +118,13 @@ public class Level
         int checkpoint = checkpoints.size();
         checkpoints.add(checkpoint, loc);
 
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        String checkpointRoot = "levels."+id+".checkpoints."+checkpoint+".";
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        String checkpointRoot = "parkours."+id+".checkpoints."+checkpoint+".";
         cfg.set(checkpointRoot+"x", loc.getBlockX());
         cfg.set(checkpointRoot+"y", loc.getBlockY());
         cfg.set(checkpointRoot+"z", loc.getBlockZ());
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,15 +135,15 @@ public class Level
     }
 
     public void setSpawn(Location spawn) {
-        FileConfiguration cfg = Parkour2.getLevelsConfig();
-        cfg.set("levels."+id+".world", spawn.getWorld().getName());
-        cfg.set("levels."+id+".spawn.x", spawn.getX());
-        cfg.set("levels."+id+".spawn.y", spawn.getY());
-        cfg.set("levels."+id+".spawn.z", spawn.getZ());
-        cfg.set("levels."+id+".spawn.pitch", spawn.getPitch());
-        cfg.set("levels."+id+".spawn.yaw", spawn.getYaw());
+        FileConfiguration cfg = Parkour2.getParkoursConfig();
+        cfg.set("parkours."+id+".world", spawn.getWorld().getName());
+        cfg.set("parkours."+id+".spawn.x", spawn.getX());
+        cfg.set("parkours."+id+".spawn.y", spawn.getY());
+        cfg.set("parkours."+id+".spawn.z", spawn.getZ());
+        cfg.set("parkours."+id+".spawn.pitch", spawn.getPitch());
+        cfg.set("parkours."+id+".spawn.yaw", spawn.getYaw());
         try {
-            cfg.save(Parkour2.getLevelsFile());
+            cfg.save(Parkour2.getParkoursFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

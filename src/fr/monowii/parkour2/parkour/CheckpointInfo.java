@@ -1,4 +1,4 @@
-package fr.monowii.parkour2.level;
+package fr.monowii.parkour2.parkour;
 
 public class CheckpointInfo
 {
@@ -8,12 +8,12 @@ public class CheckpointInfo
         END;
     };
 
-    private int levelId;
+    private int parkourId;
     private int checkpoint;
     private CheckpointType checkpointType;
 
-    public CheckpointInfo(int levelId, int checkpoint, CheckpointType checkpointType) {
-        this.levelId = levelId;
+    public CheckpointInfo(int parkourId, int checkpoint, CheckpointType checkpointType) {
+        this.parkourId = parkourId;
         this.checkpoint = checkpoint;
         this.checkpointType = checkpointType;
     }
@@ -22,8 +22,8 @@ public class CheckpointInfo
         return checkpoint;
     }
 
-    public int getLevelId() {
-        return levelId;
+    public int getParkourId() {
+        return parkourId;
     }
 
     public CheckpointType getCheckpointType() {

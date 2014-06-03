@@ -1,7 +1,7 @@
 package fr.monowii.parkour2;
 
-import fr.monowii.parkour2.level.CheckpointInfo;
-import fr.monowii.parkour2.level.Level;
+import fr.monowii.parkour2.parkour.CheckpointInfo;
+import fr.monowii.parkour2.parkour.Parkour;
 import fr.monowii.parkour2.managers.MessagesManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,41 +31,41 @@ public class PlayersCommands implements CommandExecutor
             {
                 p.sendMessage("§6---------=[ §8mwParkour2 v" + Parkour2.getPlugin().getDescription().getVersion()+ " by monowii §6]=---------");
 
-                if (p.hasPermission("mwparkour2.leveleditor") || p.hasPermission("mwparkour2.admin"))
+                if (p.hasPermission("mwparkour2.parkoureditor") || p.hasPermission("mwparkour2.admin"))
                 {
-                    p.sendMessage("§a/"+label+" new <levelName> <authors>§f  - Create a new level with your location as spawn");
-                    p.sendMessage("§a/"+label+" add <levelId>§f  - Add a checkpoint to the level");
-                    p.sendMessage("§a/"+label+" removeLast <levelId>§f  - Remove the last checkpoint level");
-                    p.sendMessage("§a/"+label+" setName <levelId> <levelName>§f  - Set the level name");
-                    p.sendMessage("§a/"+label+" setAuthors <levelId> <authors>§f  - Set the authors");
-                    p.sendMessage("§a/"+label+" setSpawn <levelId>§f  - Set the level spawn at your location");
-                    p.sendMessage("§a/"+label+" setOption <levelId> <§2w§aater§2R§aespawn/§2l§aava§2R§aespawn/§2v§aoid§2R§aespawn/§2r§aespawn§2A§at§2C§aheckpoint> <§2t§arue/§2f§aalse>§f  - Set a level option");
+                    p.sendMessage("§a/"+label+" new <parkourName> <authors>§f  - Create a new parkour (with your location as spawn)");
+                    p.sendMessage("§a/"+label+" add <parkourId>§f  - Add a checkpoint to a parkour");
+                    p.sendMessage("§a/"+label+" removeLast <parkourId>§f  - Remove the last checkpoint of a parkour");
+                    p.sendMessage("§a/"+label+" setName <parkourId> <parkourName>§f  - Set the parkour name");
+                    p.sendMessage("§a/"+label+" setAuthors <parkourId> <authors>§f  - Set the authors");
+                    p.sendMessage("§a/"+label+" setSpawn <parkourId>§f  - Set the parkour spawn at your location");
+                    p.sendMessage("§a/"+label+" setOption <parkourId> <§2w§aater§2R§aespawn/§2l§aava§2R§aespawn/§2v§aoid§2R§aespawn/§2r§aespawn§2A§at§2C§aheckpoint> <§2t§arue/§2f§aalse>§f  - Set a parkour option");
                 }
                 if (p.hasPermission("mwparkour2.admin"))
                 {
-                    p.sendMessage("§2/"+label+" delete <levelId>§f  - Delete a level");
-                    p.sendMessage("§2/"+label+" active <levelId>§f  - Active ON/OFF a level");
+                    p.sendMessage("§2/"+label+" delete <parkourId>§f  - Delete a parkour");
+                    p.sendMessage("§2/"+label+" active <parkourId>§f  - Active ON/OFF a parkour");
                     p.sendMessage("§2/"+label+" checkpointInfo§f  - Get checkpoint info where you are standing");
                 }
 
-                p.sendMessage("/§7"+label+" list [page]§f  - Show all the levels");
-                p.sendMessage("/§7"+label+" info <levelId>§f - Display parkour info");
-                p.sendMessage("/§7"+label+" best <levelId>§f - Show leaderboard");
-                p.sendMessage("/§7"+label+" join <levelId>§f - Join a level");
-                p.sendMessage("/§7"+label+" leave§f - Leave the level");
+                p.sendMessage("/§7"+label+" list [page]§f  - Show all parkours");
+                p.sendMessage("/§7"+label+" info <parkourId>§f - Display a parkour infos");
+                p.sendMessage("/§7"+label+" best <parkourId>§f - Show leaderboard");
+                p.sendMessage("/§7"+label+" join <parkourId>§f - Join a parkour");
+                p.sendMessage("/§7"+label+" leave§f - Leave the parkour");
 
                 return true;
             }
 
-            if (args[0].equalsIgnoreCase("new") && p.hasPermission("mwparkour2.leveleditor"))
+            if (args[0].equalsIgnoreCase("new") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 3)
                 {
-                    String levelName = args[1];
+                    String parkourName = args[1];
                     String authors = args[2];
 
-                    if (levelName.length() > 25) {
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorLevelNameTooLong);
+                    if (parkourName.length() > 25) {
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorParkourNameTooLong);
                         return false;
                     }
                     if (authors.length() > 25) {
@@ -73,51 +73,51 @@ public class PlayersCommands implements CommandExecutor
                         return false;
                     }
 
-                    int levelId = Parkour2.getLevelsManager().createLevel(p.getLocation(), levelName, authors);
-                    p.sendMessage(MessagesManager.prefix+MessagesManager.levelCreated.replace("%levelId", ""+levelId).replace("%levelName", levelName));
+                    int parkourId = Parkour2.getParkoursManager().createParkour(p.getLocation(), parkourName, authors);
+                    p.sendMessage(MessagesManager.prefix+MessagesManager.parkourCreated.replace("%parkourId", ""+parkourId).replace("%parkourName", parkourName));
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("add") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("add") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
 
                         Block targetBlock = p.getTargetBlock(null, 5);
                         if (targetBlock != null && targetBlock.getType() == Material.STONE_PLATE)
                         {
-                            if (!Parkour2.getLevelsManager().isCheckpoint(targetBlock.getLocation())) {
-                                level.addCheckpoint(targetBlock.getLocation());
-                                p.sendMessage(MessagesManager.prefix+MessagesManager.checkpointAdded.replace("%levelName", level.getName()));
+                            if (!Parkour2.getParkoursManager().isCheckpoint(targetBlock.getLocation())) {
+                                parkour.addCheckpoint(targetBlock.getLocation());
+                                p.sendMessage(MessagesManager.prefix+MessagesManager.checkpointAdded.replace("%parkourName", parkour.getName()));
                             }
                             else
-                                p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorCheckpointUsedByLevel);
+                                p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorCheckpointUsedByParkour);
                         }
                     }
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("removeLast") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("removeLast") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
 
-                        if (level.removeLastCheckpoint())
+                        if (parkour.removeLastCheckpoint())
                         {
                             p.sendMessage(MessagesManager.prefix+MessagesManager.lastCheckpointRemoved);
 
-                            if (level.getCheckpoints().size() < 2 && level.isActive())
+                            if (parkour.getCheckpoints().size() < 2 && parkour.isActive())
                             {
-                                level.setActive(false);
-                                p.sendMessage(MessagesManager.prefix + MessagesManager.levelActive.replace("%levelId", "" + level.getId()).replace("%activeState", "false"));
+                                parkour.setActive(false);
+                                p.sendMessage(MessagesManager.prefix + MessagesManager.parkourActive.replace("%parkourId", "" + parkour.getId()).replace("%activeState", "false"));
                             }
                         }
                         else {
@@ -128,38 +128,35 @@ public class PlayersCommands implements CommandExecutor
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("setName") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("setName") && p.hasPermission("mwparkour2.parkoureditor"))
             {
-                System.out.println("setNayyyme !");
-
                 if (args.length == 3 && Utils.isNumeric(args[1]))
                 {
-                    System.out.println("setNayyyme !");
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])));
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])));
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
-                        String newLevelName = args[2];
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
+                        String newParkourName = args[2];
 
-                        if (newLevelName.length() > 25) {
-                            p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorLevelNameTooLong);
+                        if (newParkourName.length() > 25) {
+                            p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorParkourNameTooLong);
                             return false;
                         }
 
-                        level.setName(newLevelName);
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelSetName);
+                        parkour.setName(newParkourName);
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourSetName);
                         return true;
                     }
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("setAuthors") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("setAuthors") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 3 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
                         String newAuthors = args[2];
 
                         if (newAuthors.length() > 25) {
@@ -167,37 +164,37 @@ public class PlayersCommands implements CommandExecutor
                             return false;
                         }
 
-                        level.setAuthors(newAuthors);
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelSetAuthors);
+                        parkour.setAuthors(newAuthors);
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourSetAuthors);
                         return true;
                     }
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("setSpawn") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("setSpawn") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
 
-                        level.setSpawn(p.getLocation());
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelSetSpawn);
+                        parkour.setSpawn(p.getLocation());
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourSetSpawn);
                         return true;
                     }
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
-            else if (args[0].equalsIgnoreCase("setOption") && p.hasPermission("mwparkour2.leveleditor"))
+            else if (args[0].equalsIgnoreCase("setOption") && p.hasPermission("mwparkour2.parkoureditor"))
             {
                 if (args.length == 4 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
                         if (!(args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("t") || args[3].equalsIgnoreCase("false") || args[3].equalsIgnoreCase("f")))
                             return false;
 
@@ -205,26 +202,26 @@ public class PlayersCommands implements CommandExecutor
 
                         if (args[2].equalsIgnoreCase("waterRespawn") || args[2].equalsIgnoreCase("wr"))
                         {
-                            level.getOptions().setWaterRespawn(state);
+                            parkour.getOptions().setWaterRespawn(state);
                         }
                         else if (args[2].equalsIgnoreCase("lavaRespawn") || args[2].equalsIgnoreCase("lr"))
                         {
-                            level.getOptions().setLavaRespawn(state);
+                            parkour.getOptions().setLavaRespawn(state);
                         }
                         else if (args[2].equalsIgnoreCase("voidRespawn") || args[2].equalsIgnoreCase("vr"))
                         {
-                            level.getOptions().setVoidRespawn(state);
+                            parkour.getOptions().setVoidRespawn(state);
                         }
                         else if (args[2].equalsIgnoreCase("respawnAtCheckpoint") || args[2].equalsIgnoreCase("rac"))
                         {
-                            level.getOptions().setRespawnAtCheckpoint(state);
+                            parkour.getOptions().setRespawnAtCheckpoint(state);
                         }
                         else
                         {
                             return false;
                         }
 
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelSetOption);
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourSetOption);
 
                         return true;
                     }
@@ -236,12 +233,12 @@ public class PlayersCommands implements CommandExecutor
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    int levelId = Integer.valueOf(args[1]);
+                    int parkourId = Integer.valueOf(args[1]);
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId))
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId))
                     {
-                        Parkour2.getLevelsManager().deleteDelete(levelId);
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelDeleted.replace("%levelId", ""+levelId));
+                        Parkour2.getParkoursManager().deleteDelete(parkourId);
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourDeleted.replace("%parkourId", ""+parkourId));
                     }
                 } else {
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
@@ -251,19 +248,19 @@ public class PlayersCommands implements CommandExecutor
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    if (Parkour2.getLevelsManager().containsLevel(Integer.valueOf(args[1])))
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(Integer.valueOf(args[1]));
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
 
-                        if (level.getCheckpoints().size() < 2)
+                        if (parkour.getCheckpoints().size() < 2)
                         {
                             p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorNotEnoughCheckpointsToActive);
                             return false;
                         }
 
-                        boolean newState = !level.isActive();
-                        level.setActive(newState);
-                        p.sendMessage(MessagesManager.prefix+MessagesManager.levelActive.replace("%levelId", ""+level.getId()).replace("%activeState", ""+newState));
+                        boolean newState = !parkour.isActive();
+                        parkour.setActive(newState);
+                        p.sendMessage(MessagesManager.prefix+MessagesManager.parkourActive.replace("%parkourId", ""+ parkour.getId()).replace("%activeState", ""+newState));
                         return true;
                     }
                 } else {
@@ -272,20 +269,20 @@ public class PlayersCommands implements CommandExecutor
             }
             else if (args[0].equalsIgnoreCase("checkpointInfo") && p.hasPermission("mwparkour2.admin"))
             {
-                if (Parkour2.getLevelsManager().isCheckpoint(p.getLocation()))
+                if (Parkour2.getParkoursManager().isCheckpoint(p.getLocation()))
                 {
-                    CheckpointInfo ci = Parkour2.getLevelsManager().getCheckpoint(p.getLocation());
-                    p.sendMessage("§aCheckpoint "+ci.getCheckpoint()+" ("+ci.getCheckpointType().name()+")  from level "+ci.getLevelId());
+                    CheckpointInfo ci = Parkour2.getParkoursManager().getCheckpoint(p.getLocation());
+                    p.sendMessage("§aCheckpoint "+ci.getCheckpoint()+" ("+ci.getCheckpointType().name()+")  from parkour "+ci.getParkourId());
                 }
                 else {
                     p.sendMessage("§cYou are not standing on a parkour checkpoint !");
                 }
             }
-            else if (args[0].equalsIgnoreCase("list"))
+            else if (args[0].equalsIgnoreCase("list") && p.hasPermission("mwparkour2.list"))
             {
-                int levelsToDisplay = 10;
+                int parkoursToDisplay = 10;
 
-                int maxPages = (int) Math.ceil((Parkour2.getLevelsManager().getLevels().size()-1)/levelsToDisplay);
+                int maxPages = (int) Math.ceil((Parkour2.getParkoursManager().getParkours().size()-1)/parkoursToDisplay);
                 int page = 0;
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                     page = Integer.valueOf(args[1]);
@@ -294,20 +291,20 @@ public class PlayersCommands implements CommandExecutor
                 if (page > maxPages)
                     page = maxPages;
 
-                p.sendMessage("§2---[ LevelsList (page "+page+"/"+maxPages+") ]---");
+                p.sendMessage("§2---[ Parkours (page "+page+"/"+maxPages+") ]---");
 
                 int i = 0;
                 int j = 0;
-                for (Map.Entry<Integer, Level> levels : Parkour2.getLevelsManager().getLevels().entrySet())
+                for (Map.Entry<Integer, Parkour> parkours : Parkour2.getParkoursManager().getParkours().entrySet())
                 {
-                    if (i >= levelsToDisplay*page && i <= (levelsToDisplay*page)+10)
+                    if (i >= parkoursToDisplay*page && i <= (parkoursToDisplay*page)+10)
                     {
-                        Level level = levels.getValue();
+                        Parkour parkour = parkours.getValue();
 
-                        p.sendMessage((level.isActive() ? "§a" : "§4") + level.getId()+" §f| §b"+level.getName()+" §3by "+level.getAuthors()+" §7("+level.getCheckpoints().size()+"checkpoints)");
+                        p.sendMessage((parkour.isActive() ? "§a" : "§4") + parkour.getId()+" §f| §b"+ parkour.getName()+" §3by "+ parkour.getAuthors()+" §7("+ parkour.getCheckpoints().size()+"checkpoints)");
 
                         j++;
-                        if (j >= levelsToDisplay)
+                        if (j >= parkoursToDisplay)
                             break;
                     }
                     i++;
@@ -315,17 +312,17 @@ public class PlayersCommands implements CommandExecutor
 
                 return true;
             }
-            else if (args[0].equalsIgnoreCase("best"))
+            else if (args[0].equalsIgnoreCase("best") && p.hasPermission("mwparkour2.best"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    int levelId = Integer.valueOf(args[1]);
+                    int parkourId = Integer.valueOf(args[1]);
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId))
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId))
                     {
-                        p.sendMessage("-----=[ Best times in "+ Parkour2.getLevelsManager().getLevel(levelId).getName()+" by "+ Parkour2.getLevelsManager().getLevel(levelId).getAuthors()+" ]=-----");
+                        p.sendMessage("-----=[ Best times in "+ Parkour2.getParkoursManager().getParkour(parkourId).getName()+" by "+ Parkour2.getParkoursManager().getParkour(parkourId).getAuthors()+" ]=-----");
                         int rank = 0;
-                        for (Map.Entry<String, Long> entry : Parkour2.getTimesManager().getTimes(levelId, 0).entrySet()) {
+                        for (Map.Entry<String, Long> entry : Parkour2.getTimesManager().getTimes(parkourId, 0).entrySet()) {
                             rank++;
                             p.sendMessage(rank + " §b| " + entry.getKey() + " - " + Utils.convertTime(entry.getValue()));
                         }
@@ -340,17 +337,17 @@ public class PlayersCommands implements CommandExecutor
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
                 {
-                    int levelId = Integer.valueOf(args[1]);
+                    int parkourId = Integer.valueOf(args[1]);
 
-                    if (Parkour2.getLevelsManager().containsLevel(levelId))
+                    if (Parkour2.getParkoursManager().containsParkour(parkourId))
                     {
-                        Level level = Parkour2.getLevelsManager().getLevel(levelId);
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(parkourId);
 
 
-                        level.getSpawn().getChunk().load();
+                        parkour.getSpawn().getChunk().load();
 
-                        p.teleport(level.getSpawn());
-                        p.sendMessage(MessagesManager.prefix + MessagesManager.playerJoinLevel.replace("%levelName", level.getName()).replace("%levelId", ""+level.getId()));
+                        p.teleport(parkour.getSpawn());
+                        p.sendMessage(MessagesManager.prefix + MessagesManager.playerJoinParkour.replace("%parkourName", parkour.getName()).replace("%parkourId", ""+ parkour.getId()));
                         return true;
                     }
                 } else {
@@ -361,8 +358,8 @@ public class PlayersCommands implements CommandExecutor
             {
                 if (Parkour2.getPlayersManager().containsPlayer(p))
                 {
-                    String levelName = Parkour2.getLevelsManager().getLevel( Parkour2.getPlayersManager().getPlayer(p).getLevelId() ).getName();
-                    p.sendMessage(MessagesManager.prefix+MessagesManager.playerLeaveLevel.replace("%levelName", levelName));
+                    String parkourName = Parkour2.getParkoursManager().getParkour(Parkour2.getPlayersManager().getPlayer(p).getParkourId()).getName();
+                    p.sendMessage(MessagesManager.prefix+MessagesManager.playerLeaveParkour.replace("%parkourName", parkourName));
                     Parkour2.getPlayersManager().removePlayer(p);
                 }
             }

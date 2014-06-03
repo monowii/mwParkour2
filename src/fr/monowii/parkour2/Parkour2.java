@@ -4,7 +4,7 @@ import fr.husky.Database;
 import fr.husky.sqlite.SQLite;
 import fr.monowii.parkour2.managers.PlayersManager;
 import fr.husky.mysql.MySQL;
-import fr.monowii.parkour2.managers.LevelsManager;
+import fr.monowii.parkour2.managers.ParkoursManager;
 import fr.monowii.parkour2.managers.TimesManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,26 +17,29 @@ import java.io.IOException;
 public class Parkour2 extends JavaPlugin
 {
     /* PERMISSIONS:
+       - mwparkour2.join
+       - mwparkour2.list
+       - mwparkour2.best
        - mwparkour2.sign - Can place special parkour sign
-       - mwparkour2.leveleditor - Access to commands: /pk <new/add/removeLast/setName/setAuthors/setSpawn>
+       - mwparkour2.parkoureditor - Access to commands: /pk <new/add/removeLast/setName/setAuthors/setSpawn>
        - mwparkour2.admin - Total access
      */
 
     /* TODO
      * messages translation
      * better help message with /pk   (/pk help create    /pk help options   ...)
-     * Move levels to sql ?
+     * Move parkours infos/checkpoints to sql ?
      */
 
 
     private static JavaPlugin plugin;
 
-    private static LevelsManager levelsManager;
+    private static ParkoursManager parkoursManager;
     private static TimesManager timesManager;
     private static PlayersManager playersManager;
 
-    private static FileConfiguration levelsConfig;
-    private static File levelsFile;
+    private static FileConfiguration parkoursConfig;
+    private static File parkoursFile;
 
     private static Database database;
     private static boolean MySqlEnable = false;
@@ -48,7 +51,7 @@ public class Parkour2 extends JavaPlugin
 
     public void onEnable() {
         plugin = this;
-        levelsManager = new LevelsManager();
+        parkoursManager = new ParkoursManager();
         timesManager = new TimesManager();
         playersManager = new PlayersManager();
 
@@ -59,7 +62,7 @@ public class Parkour2 extends JavaPlugin
         getCommand("parkour").setExecutor(new PlayersCommands());
         getServer().getPluginManager().registerEvents(new PlayersListeners(), this);
 
-        levelsManager.loadLevels();
+        parkoursManager.loadParkours();
         timesManager.loadTimes();
 
         try {
@@ -75,14 +78,14 @@ public class Parkour2 extends JavaPlugin
 
 
     private void loadConfigs() {
-        //Levels config
-        levelsFile = new File(getDataFolder(), "levels.yml");
+        //Parkours config
+        parkoursFile = new File(getDataFolder(), "parkours.yml");
         try {
-            levelsFile.createNewFile();
+            parkoursFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        levelsConfig = YamlConfiguration.loadConfiguration(levelsFile);
+        parkoursConfig = YamlConfiguration.loadConfiguration(parkoursFile);
 
         //Config
         FileConfiguration cfg = getConfig();
@@ -117,8 +120,8 @@ public class Parkour2 extends JavaPlugin
         return plugin;
     }
 
-    public static LevelsManager getLevelsManager() {
-        return levelsManager;
+    public static ParkoursManager getParkoursManager() {
+        return parkoursManager;
     }
 
     public static TimesManager getTimesManager() {
@@ -130,12 +133,12 @@ public class Parkour2 extends JavaPlugin
     }
 
 
-    public static FileConfiguration getLevelsConfig() {
-        return levelsConfig;
+    public static FileConfiguration getParkoursConfig() {
+        return parkoursConfig;
     }
 
-    public static File getLevelsFile() {
-        return levelsFile;
+    public static File getParkoursFile() {
+        return parkoursFile;
     }
 
 
