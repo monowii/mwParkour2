@@ -312,6 +312,28 @@ public class PlayersCommands implements CommandExecutor
 
                 return true;
             }
+            else if (args[0].equalsIgnoreCase("info") && p.hasPermission("mwparkour2.info"))
+            {
+                if (args.length == 2 && Utils.isNumeric(args[1]))
+                {
+                    if (Parkour2.getParkoursManager().containsParkour(Integer.valueOf(args[1])))
+                    {
+                        Parkour parkour = Parkour2.getParkoursManager().getParkour(Integer.valueOf(args[1]));
+
+                        p.sendMessage("§8---=[ Parkour ID "+parkour.getName()+" info ]=---");
+                        p.sendMessage("§7Name:§f " + parkour.getName());
+                        p.sendMessage("§7Authors:§f " + parkour.getAuthors());
+                        p.sendMessage("§7world:§f " + parkour.getSpawn().getWorld().getName());
+                        p.sendMessage("§7totalCheckpoints:§f " + parkour.getCheckpoints().size());
+                        p.sendMessage("§7WaterRespawn:§f " + parkour.getOptions().isWaterRespawn());
+                        p.sendMessage("§7LavaRespawn:§f " + parkour.getOptions().isLavaRespawn());
+                        p.sendMessage("§7VoidRespawn:§f " + parkour.getOptions().isVoidRespawn());
+                        p.sendMessage("§7RespawnAtCheckpoint:§f " + parkour.getOptions().isRespawnAtCheckpoint());
+                    }
+                } else {
+                    p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
+                }
+            }
             else if (args[0].equalsIgnoreCase("best") && p.hasPermission("mwparkour2.best"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))

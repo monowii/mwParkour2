@@ -112,10 +112,10 @@ public class ParkoursManager
         cfg.set(rootNode+"spawn.pitch", spawn.getPitch());
         cfg.set(rootNode+"spawn.yaw", spawn.getYaw());
 
-        cfg.set(rootNode+"options.waterRespawn", false);
-        cfg.set(rootNode+"options.lavaRespawn", false);
-        cfg.set(rootNode+"options.voidRespawn", false);
-        cfg.set(rootNode+"options.respawnAtCheckpoint", false);
+        cfg.set(rootNode+"options.waterRespawn", true);
+        cfg.set(rootNode+"options.lavaRespawn", true);
+        cfg.set(rootNode+"options.voidRespawn", true);
+        cfg.set(rootNode+"options.respawnAtCheckpoint", true);
 
         try {
             cfg.save(Parkour2.getParkoursFile());
