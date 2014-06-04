@@ -17,10 +17,11 @@ import java.io.IOException;
 public class Parkour2 extends JavaPlugin
 {
     /* PERMISSIONS:
-       - mwparkour2.join
-       - mwparkour2.list
-       - mwparkour2.best
-       - mwparkour2.sign - Can place special parkour sign
+       - mwparkour2.join - Command /pk join <parkourId>
+       - mwparkour2.list - Command /pk list
+       - mwparkour2.best - Command /pk best <parkourId>
+       - mwparkour2.info - Command /pk info <parkourId>
+       - mwparkour2.sign - Place [mwParkour2] sings
        - mwparkour2.parkoureditor - Access to commands: /pk <new/add/removeLast/setName/setAuthors/setSpawn>
        - mwparkour2.admin - Total access
      */
@@ -64,6 +65,7 @@ public class Parkour2 extends JavaPlugin
 
         parkoursManager.loadParkours();
         timesManager.loadTimes();
+        Lobby.load();
 
         try {
             new Metrics(this).start();
@@ -86,6 +88,14 @@ public class Parkour2 extends JavaPlugin
             e.printStackTrace();
         }
         parkoursConfig = YamlConfiguration.loadConfiguration(parkoursFile);
+
+        parkoursConfig.addDefault("lobby.world", "undefined");
+        parkoursConfig.options().copyDefaults(true);
+        try {
+            parkoursConfig.save(parkoursFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Config
         FileConfiguration cfg = getConfig();

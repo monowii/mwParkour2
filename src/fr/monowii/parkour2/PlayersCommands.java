@@ -33,19 +33,20 @@ public class PlayersCommands implements CommandExecutor
 
                 if (p.hasPermission("mwparkour2.parkoureditor") || p.hasPermission("mwparkour2.admin"))
                 {
-                    p.sendMessage("§a/"+label+" new <parkourName> <authors>§f  - Create a new parkour (with your location as spawn)");
-                    p.sendMessage("§a/"+label+" add <parkourId>§f  - Add a checkpoint to a parkour");
-                    p.sendMessage("§a/"+label+" removeLast <parkourId>§f  - Remove the last checkpoint of a parkour");
-                    p.sendMessage("§a/"+label+" setName <parkourId> <parkourName>§f  - Set the parkour name");
-                    p.sendMessage("§a/"+label+" setAuthors <parkourId> <authors>§f  - Set the authors");
-                    p.sendMessage("§a/"+label+" setSpawn <parkourId>§f  - Set the parkour spawn at your location");
-                    p.sendMessage("§a/"+label+" setOption <parkourId> <§2w§aater§2R§aespawn/§2l§aava§2R§aespawn/§2v§aoid§2R§aespawn/§2r§aespawn§2A§at§2C§aheckpoint> <§2t§arue/§2f§aalse>§f  - Set a parkour option");
+                    p.sendMessage("§a/"+label+" new <parkourName> <authors>§f - Create a new parkour (with your location as spawn)");
+                    p.sendMessage("§a/"+label+" add <parkourId>§f - Add a checkpoint to a parkour");
+                    p.sendMessage("§a/"+label+" removeLast <parkourId>§f - Remove the last checkpoint of a parkour");
+                    p.sendMessage("§a/"+label+" setName <parkourId> <parkourName>§f - Set parkour name");
+                    p.sendMessage("§a/"+label+" setAuthors <parkourId> <authors>§f - Set parkour authors");
+                    p.sendMessage("§a/"+label+" setSpawn <parkourId>§f - Set the parkour spawn at your location");
+                    p.sendMessage("§a/"+label+" setOption <parkourId> <§2w§aater§2R§aespawn/§2l§aava§2R§aespawn/§2v§aoid§2R§aespawn/§2r§aespawn§2A§at§2C§aheckpoint> <§2t§arue/§2f§aalse>§f - Set a parkour option");
                 }
                 if (p.hasPermission("mwparkour2.admin"))
                 {
-                    p.sendMessage("§2/"+label+" delete <parkourId>§f  - Delete a parkour");
-                    p.sendMessage("§2/"+label+" active <parkourId>§f  - Active ON/OFF a parkour");
-                    p.sendMessage("§2/"+label+" checkpointInfo§f  - Get checkpoint info where you are standing");
+                    p.sendMessage("§2/"+label+" setLobby§f - Set the parkour lobby");
+                    p.sendMessage("§2/"+label+" delete <parkourId>§f - Delete a parkour/besttimes");
+                    p.sendMessage("§2/"+label+" active <parkourId>§f  - Toggle ON/OFF");
+                    p.sendMessage("§2/"+label+" checkpointInfo§f  - Get checkpoint info where you are");
                 }
 
                 p.sendMessage("/§7"+label+" list [page]§f  - Show all parkours");
@@ -229,6 +230,12 @@ public class PlayersCommands implements CommandExecutor
                     p.sendMessage(MessagesManager.prefix+MessagesManager.ErrorArgs);
                 }
             }
+            else if (args[0].equalsIgnoreCase("setLobby") && p.hasPermission("mwparkour2.admin"))
+            {
+                Lobby.setLobby(p.getLocation());
+                Lobby.save();
+                p.sendMessage(MessagesManager.prefix+MessagesManager.lobbySet);
+            }
             else if (args[0].equalsIgnoreCase("delete") && p.hasPermission("mwparkour2.admin"))
             {
                 if (args.length == 2 && Utils.isNumeric(args[1]))
@@ -238,6 +245,7 @@ public class PlayersCommands implements CommandExecutor
                     if (Parkour2.getParkoursManager().containsParkour(parkourId))
                     {
                         Parkour2.getParkoursManager().deleteDelete(parkourId);
+                        Parkour2.getTimesManager().deleteParkourTimes(parkourId);
                         p.sendMessage(MessagesManager.prefix+MessagesManager.parkourDeleted.replace("%parkourId", ""+parkourId));
                     }
                 } else {

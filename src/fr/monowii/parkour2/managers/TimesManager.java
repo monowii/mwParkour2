@@ -26,6 +26,16 @@ public class TimesManager
         }
     }
 
+    public void deleteParkourTimes(int parkourId) {
+        try {
+            PreparedStatement ps = Parkour2.getParkourDatabase().getConnection().prepareStatement("DELETE FROM times WHERE parkourId = ?");
+            ps.setInt(1, parkourId);
+            ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public LinkedHashMap<String, Long> getTimes(int parkourId, int page) {
         LinkedHashMap<String, Long> times = new LinkedHashMap<String, Long>();
         try {

@@ -35,6 +35,8 @@ public class MessagesManager {
     public static String ErrorAuthorsTooLong = "§cAuthors string is too long (25characters max)! ";
     public static String ErrorArgs = "§cBad args !";
 
+    public static String lobbySet = "§aLobby set !";
+
     static {
 
     }
